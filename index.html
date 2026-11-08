@@ -201,7 +201,49 @@ body.editing .tile { touch-action: none; }
 .slot.ph { border-radius: var(--r); outline: 1px dashed var(--faint); outline-offset: -1px; }
 .slot.ph .tile { visibility: hidden; }
 .ghost { position: fixed; z-index: 60; pointer-events: none; margin: 0; box-shadow: 0 22px 50px rgba(0, 0, 0, .45); transform: scale(1.04); animation: none !important; }
-.ghost .sizer { display: none !important; }
+.ghost .sizer, .ghost .tile-hide { display: none !important; }
+.tile-hide { position: absolute; top: -7px; left: -7px; z-index: 3; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--glass-line); background: var(--sheet); color: var(--ink); display: none; place-items: center; padding: 0; font-size: 1rem; line-height: 1; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+body.editing .tile-hide { display: grid; }
+.editbar { display: flex; flex-direction: column; gap: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 7px; border: 1px dashed var(--faint); background: none; border-radius: 999px; padding: 8px 13px; font-size: .84rem; color: var(--muted); }
+.chip .dot { width: 6px; height: 6px; }
+.t-prog { height: 3px; border-radius: 2px; background: var(--glass-line); overflow: hidden; margin-top: 8px; }
+.t-prog i { display: block; height: 100%; border-radius: 2px; }
+/* instellingen */
+.sec { border-radius: var(--r); overflow: hidden; }
+.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 16px; }
+.sec > summary::-webkit-details-marker { display: none; }
+.sec > summary b { font-family: var(--f-display); font-weight: var(--dw, 400); font-size: 1.25rem; flex: 1; }
+.sec > summary small { color: var(--muted); font-size: .8rem; text-align: right; max-width: 55%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sec > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); margin: -4px 4px 0 0; transition: transform .2s; flex: none; }
+.sec[open] > summary::after { transform: rotate(-135deg); margin-top: 4px; }
+.sec-body { padding: 0 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+.srow { display: flex; align-items: center; gap: 12px; min-height: 44px; border-top: 1px solid var(--glass-line); padding-top: 10px; }
+.sec-body > .srow:first-child { border-top: 0; padding-top: 0; }
+.srow > label, .srow > .lbl { flex: 1; min-width: 0; font-size: .92rem; }
+.srow .dot { width: 9px; height: 9px; }
+.srow select, .pick { font: inherit; font-size: 16px; color: var(--ink); background-color: var(--field); border: 1px solid var(--glass-line); border-radius: 999px; padding: 8px 32px 8px 14px; min-height: 40px; -webkit-appearance: none; appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 17px) 52%, calc(100% - 12px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
+.srow select option, .pick option { color: #1C1713; }
+.srow.col { flex-direction: column; align-items: stretch; gap: 8px; }
+.srow.col .lbl { display: flex; justify-content: space-between; }
+.srow.col .lbl small { color: var(--muted); }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 26px; background: transparent; margin: 0; }
+input[type="range"]::-webkit-slider-runnable-track { height: 8px; border-radius: 4px; background: var(--track, var(--glass-line)); border: 1px solid var(--glass-line); }
+input[type="range"]::-moz-range-track { height: 8px; border-radius: 4px; background: var(--track, var(--glass-line)); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: var(--thumb, var(--ink)); border: 3px solid var(--ink); margin-top: -9px; box-shadow: 0 2px 8px rgba(0,0,0,.35); }
+input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--thumb, var(--ink)); border: 3px solid var(--ink); }
+.hue { --track: linear-gradient(90deg, hsl(0 50% 45%), hsl(30 55% 45%), hsl(60 45% 42%), hsl(120 30% 40%), hsl(180 35% 38%), hsl(220 35% 45%), hsl(270 30% 45%), hsl(320 40% 45%), hsl(360 50% 45%)); }
+.switch, .srow > label.switch { position: relative; width: 46px; height: 28px; flex: 0 0 46px; }
+.switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; z-index: 1; }
+.switch span { position: absolute; inset: 0; border-radius: 999px; background: var(--glass-line); transition: background .2s; }
+.switch span::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--ink); transition: transform .2s; }
+.switch input:checked + span { background: var(--accent); }
+.switch input:checked + span::after { transform: translateX(18px); background: var(--accent-ink); }
+.switch input:focus-visible + span { outline: 1.5px solid var(--accent); outline-offset: 2px; }
+.preview { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; padding: 14px; border-radius: var(--r); background: var(--bg); border: 1px solid var(--glass-line); }
+.preview .tile { cursor: default; }
 
 /* detailschermen */
 .dhead { display: flex; flex-direction: column; gap: 6px; padding: 6px 2px 2px; }
@@ -257,6 +299,13 @@ svg.i { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: rou
 .pothead .prog { width: 100%; height: 4px; margin-top: 0; }
 .pothead .hint { width: 100%; }
 
+.cc-card { gap: 14px; }
+.eyebrow-s { font-size: .66rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+.cc-big { font-family: var(--f-display); font-weight: var(--dw, 400); font-size: calc(clamp(2.8rem, 14vw, 4rem) * var(--ds, 1) * 1.1); line-height: 1; letter-spacing: -.02em; }
+.cc-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cc-two div { border-top: 1px solid var(--glass-line); padding-top: 10px; font-size: .95rem; }
+.cc-two span { display: block; font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.quick { display: flex; flex-wrap: wrap; gap: 8px; }
 .panel { border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 .panel p { margin: 0; }
 .panel h3 { margin: 0; font-family: var(--f-display); font-weight: var(--dw, 400); font-size: 1.3rem; }
@@ -366,7 +415,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
 (function () {
   "use strict";
   const PREVIEW = false;
-  const KEY = PREVIEW ? "saldo.preview.v5" : "saldo.v1";
+  const KEY = PREVIEW ? "saldo.preview.v8" : "saldo.v1";
 
   /* ---------- vaste gegevens ---------- */
   const CATS = ["Wonen", "Energie & water", "Verzekeringen", "Abonnementen", "Vervoer", "Boodschappen", "Kinderen", "Leningen", "Overig"];
@@ -378,7 +427,21 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     ["grafiet", "Grafiet", "#2C2722", "#E8DFD2"],
   ];
   const DEFAULT_COLORS = { accent: "brons", in: "zand", uit: "leisteen", buy: "cognac", cc: "bordeaux", kl: "oudroze", sav: "salie" };
-  const DEFAULT_BG = { top: "cognac", bottom: "bordeaux", strength: "normaal" };
+  const DEFAULT_BG = { h1: 22, h2: 350, strength: 65 };
+  const TILE_NAMES = { sav: "Sparen", in: "Inkomsten", uit: "Vaste lasten", cc: "Creditcard", kl: "Klarna", buy: "Aankopen" };
+  const SOURCES = [
+    ["manual", "Eigen bedrag", "Je vult het bedrag zelf in"],
+    ["perDay", "Per dag te besteden", "Verwacht eind maand gedeeld door de dagen die nog over zijn"],
+    ["expected", "Verwacht eind maand", "Zelfde als bovenaan"],
+    ["balance", "Op rekening", "Je huidige saldo"],
+    ["over", "Over deze maand", "Inkomsten min alle kosten"],
+    ["inLeft", "Nog binnen", "Inkomsten die nog niet zijn afgevinkt"],
+    ["costLeft", "Nog eraf", "Kosten die nog niet zijn afgevinkt, plus creditcard"],
+    ["savings", "Spaargeld totaal", "Alle potjes samen"],
+    ["ccOpen", "Creditcard openstaand", "Wat nog afgelost moet worden"],
+    ["klRest", "Klarna nog te betalen", "Alle termijnen die nog komen"],
+    ["networth", "Vermogen", "Rekening + spaargeld + eigen bedragen − creditcard − Klarna"],
+  ];
   const COLOR_TARGETS = [["accent", "Accent", "Vinkjes, knoppen en details"], ["in", "Inkomsten"], ["uit", "Vaste lasten"], ["buy", "Aankopen"], ["cc", "Creditcard"], ["kl", "Klarna"], ["sav", "Sparen"]];
   const TILE_IDS = ["sav", "in", "uit", "cc", "kl", "buy"];
   const WIDTHS = [[2, "⅓", "Een derde"], [3, "½", "Half"], [4, "⅔", "Twee derde"], [6, "1", "Volle breedte"]];
@@ -412,7 +475,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   const eur = new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR" });
   const pad = n => String(n).padStart(2, "0");
   const ym = d => d.getFullYear() + "-" + pad(d.getMonth() + 1);
-  const NOW = ym(new Date());
+  let NOW = ym(new Date());
   const today = () => { const d = new Date(); return ym(d) + "-" + pad(d.getDate()); };
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const FREQ = { maand: 1, kwartaal: 3, jaar: 12 };
@@ -472,48 +535,80 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   const depStart = it => it.once || histOf(it)[0].from;
 
   /* ---------- opslag op dit toestel ---------- */
-  function normLayout(l, sixths) {
-    const out = [], seen = new Set();
+  function normLayout(l, sixths, customIds = []) {
+    const out = [], seen = new Set(), ok = id => TILE_IDS.includes(id) || customIds.includes(id);
     (Array.isArray(l) ? l : []).forEach(t => {
-      if (!t || !TILE_IDS.includes(t.id) || seen.has(t.id)) return;
+      if (!t || !ok(t.id) || seen.has(t.id)) return;
       let w = Number(t.w);
       if (!sixths) w = w * 2; // oude indeling in derden omzetten naar zesden
-      seen.add(t.id); out.push({ id: t.id, w: [2, 3, 4, 6].includes(w) ? w : 2 });
+      seen.add(t.id); out.push({ id: t.id, w: [2, 3, 4, 6].includes(w) ? w : 2, hidden: !!t.hidden });
     });
-    DEFAULT_LAYOUT.forEach(t => { if (!seen.has(t.id)) out.push({ ...t }); });
+    DEFAULT_LAYOUT.forEach(t => { if (!seen.has(t.id)) out.push({ ...t, hidden: false }); });
+    customIds.forEach(id => { if (!seen.has(id)) out.push({ id, w: 3, hidden: false }); });
     return out;
+  }
+  function hexHue(hex) {
+    const n = parseInt(String(hex).slice(1), 16), r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; if (!d) return 0;
+    let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return Math.round((h * 60 + 360) % 360);
   }
   function normalize(d) {
     d = obj(d);
     const out = {
       items: Array.isArray(d.items) ? d.items.filter(i => i && i.id && i.kind && i.kind !== "cc") : [],
-      balances: obj(d.balances), ccs: obj(d.ccs), paid: obj(d.paid), lastBackup: d.lastBackup || null,
+      balances: obj(d.balances), paid: obj(d.paid), lastBackup: d.lastBackup || null,
       pots: Array.isArray(d.pots) ? d.pots.filter(p => p && p.id) : [],
     };
     if (!Array.isArray(d.pots) && d.savs && Object.keys(d.savs).length)
       out.pots = [{ id: newId(), name: "Spaarrekening", icon: "munten", goal: null, snaps: obj(d.savs) }];
     out.pots.forEach(p => { p.snaps = obj(p.snaps); if (!ICONS[p.icon]) p.icon = "munten"; });
+    // creditcard als doorlopende rekening: openstaand bedrag plus een logboek
+    if (Array.isArray(d.ccLog)) {
+      out.ccLog = d.ccLog.filter(e => e && e.id && ["set", "kl", "pay", "buy"].includes(e.kind) && isMonth(e.month));
+      out.ccOpen = Number(d.ccOpen) || 0;
+    } else {
+      // oude opslag: per maand een tussenstand en een vinkje 'afgeschreven'
+      out.ccLog = []; out.ccOpen = 0;
+      const ccs = obj(d.ccs), paid = obj(d.paid);
+      Object.keys(ccs).filter(isMonth).sort().forEach(m => {
+        const a = Number(ccs[m].amount) || 0; if (!a) return;
+        out.ccLog.push({ id: newId(), kind: "set", month: m, date: m + "-01", delta: a, amount: a, at: ccs[m].at || Date.now() });
+        out.ccOpen += a;
+        // vorige maanden telden in de oude versie niet meer mee, dus die gelden als afgelost
+        if ((paid[m] && paid[m].cc) || m < NOW) { out.ccLog.push({ id: newId(), kind: "pay", month: m, date: m + "-28", delta: -a, amount: a, at: ccs[m].at || Date.now() }); out.ccOpen -= a; }
+      });
+      Object.keys(paid).forEach(m => { if (paid[m] && paid[m].cc) delete paid[m].cc; });
+      out.ccOpen = r2(out.ccOpen);
+    }
     const s = obj(d.set);
+    const custom = (Array.isArray(s.custom) ? s.custom : []).filter(t => t && typeof t.id === "string" && t.id.startsWith("c_"))
+      .map(t => ({ id: t.id, name: String(t.name || "Eigen tegel").slice(0, 40), color: PALETTE.some(p => p[0] === t.color) ? t.color : "brons",
+        src: String(t.src || "manual"), goal: Number(t.goal) > 0 ? Number(t.goal) : null, value: Number(t.value) || 0, at: t.at || null, inNet: !!t.inNet }));
     out.set = {
       name: typeof s.name === "string" ? s.name : "Saldo",
       theme: ["auto", "light", "dark"].includes(s.theme) ? s.theme : "dark",
-      font: "hedvig",
-      colors: {}, layout: normLayout(s.layout, s.grid === 6), grid: 6,
+      font: "hedvig", custom, balLock: s.balLock !== false,
+      colors: {}, layout: normLayout(s.layout, s.grid === 6, custom.map(t => t.id)), grid: 6,
     };
     for (const k in DEFAULT_COLORS) { const v = s.colors && s.colors[k]; out.set.colors[k] = PALETTE.some(p => p[0] === v) ? v : DEFAULT_COLORS[k]; }
-    const bg = obj(s.bg), okBg = v => v === "none" || PALETTE.some(p => p[0] === v);
-    out.set.bg = { top: okBg(bg.top) ? bg.top : DEFAULT_BG.top, bottom: okBg(bg.bottom) ? bg.bottom : DEFAULT_BG.bottom,
-      strength: ["zacht", "normaal", "sterk"].includes(bg.strength) ? bg.strength : DEFAULT_BG.strength };
+    const bg = obj(s.bg), num = (v, d, mx) => Number.isFinite(Number(v)) && v !== "" && v != null ? Math.max(0, Math.min(mx, Number(v))) : d;
+    if (bg.h1 != null || bg.h2 != null) out.set.bg = { h1: num(bg.h1, DEFAULT_BG.h1, 360), h2: num(bg.h2, DEFAULT_BG.h2, 360), strength: num(bg.strength, DEFAULT_BG.strength, 100) };
+    else {
+      // oude instelling met kleurnamen omzetten naar tinten
+      const hue = (id, d) => { const p = PALETTE.find(x => x[0] === id); return p ? hexHue(p[2]) : d; };
+      out.set.bg = { h1: hue(bg.top, DEFAULT_BG.h1), h2: hue(bg.bottom, DEFAULT_BG.h2), strength: ({ zacht: 33, normaal: 65, sterk: 100 })[bg.strength] ?? DEFAULT_BG.strength };
+    }
     return out;
   }
   let saved = null;
   try { saved = JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) {}
-  const S = Object.assign(normalize(saved), { month: NOW, view: "overview", editing: false, pendingRestore: null, fresh: !saved });
+  const S = Object.assign(normalize(saved), { month: NOW, view: "overview", editing: false, pendingRestore: null, fresh: !saved, openSec: new Set() });
   function persist() {
-    try { localStorage.setItem(KEY, JSON.stringify({ v: 2, items: S.items, balances: S.balances, ccs: S.ccs, pots: S.pots, paid: S.paid, set: S.set, lastBackup: S.lastBackup })); }
+    try { localStorage.setItem(KEY, JSON.stringify({ v: 3, items: S.items, balances: S.balances, ccOpen: S.ccOpen, ccLog: S.ccLog, pots: S.pots, paid: S.paid, set: S.set, lastBackup: S.lastBackup })); }
     catch (e) { toast("Opslaan lukte niet. Je toestel blokkeert opslag of zit vol."); }
   }
-  if (saved && saved.v !== 2) persist(); // oude opslag direct omzetten naar het nieuwe formaat
+  if (saved && saved.v !== 3) persist(); // oude opslag direct omzetten naar het nieuwe formaat
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {}); } catch (e) {}
   const isPaid = (m, id) => !!(S.paid[m] && S.paid[m][id]);
   function setPaid(m, id, v) {
@@ -521,21 +616,27 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     if (v) S.paid[m][id] = true; else delete S.paid[m][id];
     if (!Object.keys(S.paid[m]).length) delete S.paid[m];
   }
-  function upsert(item) { const i = S.items.findIndex(x => x.id === item.id); if (i >= 0) S.items[i] = item; else S.items.push(item); persist(); render(); }
-  function removeItem(id) { S.items = S.items.filter(x => x.id !== id); Object.keys(S.paid).forEach(m => setPaid(m, id, false)); persist(); render(); }
+  function upsert(item) { const i = S.items.findIndex(x => x.id === item.id); if (i >= 0) S.items[i] = item; else S.items.push(item); if (item.kind === "buy") syncBuyCC(item); persist(); render(); }
+  function removeItem(id) { const it = S.items.find(x => x.id === id); if (it && it.kind === "buy") syncBuyCC({ ...it, deleted: true }); S.items = S.items.filter(x => x.id !== id); Object.keys(S.paid).forEach(m => setPaid(m, id, false)); persist(); render(); }
 
   /* ---------- berekening ---------- */
   function potAt(pot, m) {
     const snapM = Object.keys(pot.snaps).filter(k => k <= m).sort().pop();
     let total = snapM ? Number(pot.snaps[snapM].amount) || 0 : 0;
     const deps = S.items.filter(i => i.kind === "dep" && i.potId === pot.id);
-    if (!deps.length) return total;
-    let start = snapM || deps.map(depStart).sort()[0];
+    const outs = S.items.filter(i => i.kind === "buy" && i.fromPot === pot.id && isMonth(String(i.date || "").slice(0, 7)));
+    if (!deps.length && !outs.length) return total;
+    let start = snapM || deps.map(depStart).concat(outs.map(o => o.date.slice(0, 7))).sort()[0];
     for (let k = start, n = 0; k <= m && n < 600; k = addMonths(k, 1), n++) {
       for (const d of deps) {
         const v = depAt(d, k); if (!v) continue;
         if (snapM && k === snapM && isPaid(k, d.id)) continue; // al verwerkt in het ingevulde bedrag
         total += v;
+      }
+      for (const o of outs) {
+        if (!o.date.startsWith(k)) continue;
+        if (snapM && k === snapM && isPaid(k, o.id)) continue;
+        total -= Number(o.amount) || 0;
       }
     }
     return total;
@@ -554,21 +655,49 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   // past het saldo van maand m aan met een bedrag; geeft false als er nog geen saldo bekend is
   function adjustBalance(m, delta) {
     if (!delta) return true;
+    if (S.set.balLock) return "locked"; // vastgezet: alleen jij past je saldo aan
     const b = balAt(m); if (!b) return false;
     S.balances[m] = { ...(S.balances[m] || {}), amount: r2(Number(b.amount) + delta), at: Date.now() };
     return true;
   }
+  function ccAdd(kind, delta, extra = {}) {
+    const m = extra.month || S.month;
+    const date = extra.date || (m === ym(new Date()) ? today() : m + "-01");
+    const e = { id: newId(), kind, month: m, date, delta: r2(delta), at: Date.now(), ...extra };
+    S.ccLog.push(e); S.ccOpen = r2(S.ccOpen + delta);
+    return e;
+  }
+  // een aankoop die met de creditcard is betaald, staat als regel op de creditcard
+  function syncBuyCC(item) {
+    const old = S.ccLog.find(e => e.kind === "buy" && e.ref === item.id); if (old) ccRemove(old);
+    if (item.kind === "buy" && item.via === "cc" && !item.deleted) {
+      const amt = Number(item.amount) || 0;
+      ccAdd("buy", amt, { ref: item.id, name: item.name, amount: amt, date: item.date, month: String(item.date).slice(0, 7) });
+    }
+  }
+  function ccRemove(e) { S.ccLog = S.ccLog.filter(x => x.id !== e.id); S.ccOpen = r2(S.ccOpen - e.delta); }
+  const ccSpend = m => S.ccLog.filter(e => e.month === m && e.kind !== "pay").reduce((s, e) => s + e.delta, 0);
+  const ccPaidIn = m => S.ccLog.filter(e => e.month === m && e.kind === "pay").reduce((s, e) => s + e.amount, 0);
+  const lastPay = () => S.ccLog.filter(e => e.kind === "pay").sort((a, b) => (a.date + a.at).localeCompare(b.date + b.at)).pop();
+
   function togglePaid(id) {
     const m = S.month, it = S.items.find(i => i.id === id); if (!it) return;
     const on = !isPaid(m, id); setPaid(m, id, on);
     const v = r2(valueAt(it, m));
     if (it.kind === "kl") {
-      const cur = S.ccs[m];
-      S.ccs[m] = { ...(cur || {}), amount: r2((cur ? Number(cur.amount) || 0 : 0) + (on ? v : -v)), at: Date.now() };
+      if (on) ccAdd("kl", v, { ref: id, name: it.name });
+      else { const e = S.ccLog.filter(x => x.kind === "kl" && x.ref === id && x.month === m).pop(); if (e) ccRemove(e); else ccAdd("kl", -v, { ref: id, name: it.name }); }
       toast(on ? `${eur.format(v)} op je creditcard gezet` : `${eur.format(v)} van je creditcard gehaald`);
+    } else if (it.kind === "buy" && it.via === "cc") {
+      toast(on ? "Staat op je creditcard" : "Vinkje eraf");
+    } else if (it.kind === "buy" && it.fromPot) {
+      const pot = S.pots.find(x => x.id === it.fromPot);
+      toast(on ? `Van je potje ${pot ? pot.name : ""} gehaald` : "Vinkje eraf");
     } else {
       const inc = it.kind === "in";
-      if (adjustBalance(m, (inc ? 1 : -1) * (on ? v : -v)))
+      const res = adjustBalance(m, (inc ? 1 : -1) * (on ? v : -v));
+      if (res === "locked") toast(on ? (inc ? "Ontvangen. Je saldo staat vast." : "Afgeschreven. Je saldo staat vast.") : "Vinkje eraf");
+      else if (res)
         toast(inc ? (on ? `${eur.format(v)} bijgeschreven op je saldo` : `${eur.format(v)} weer van je saldo gehaald`)
                   : (on ? `${eur.format(v)} afgeschreven van je saldo` : `${eur.format(v)} teruggezet op je saldo`));
       else toast("Afgevinkt. Vul je saldo in, dan rekent het vanzelf mee.");
@@ -579,7 +708,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const r = { in: [], uit: [], buy: [], kl: [], dep: [] };
     for (const it of S.items) {
       if (it.kind === "in" || it.kind === "uit") { const e = entryAt(it, m); if (e) r[it.kind].push({ it, e, v: monthly(e) }); }
-      else if (it.kind === "buy") { if (String(it.date || "").startsWith(m)) r.buy.push({ it, v: Number(it.amount) || 0 }); }
+      else if (it.kind === "buy") { if (String(it.date || "").startsWith(m)) { const pot = it.fromPot ? S.pots.find(p => p.id === it.fromPot) : null; r.buy.push({ it, v: Number(it.amount) || 0, pot }); } }
       else if (it.kind === "kl") { const k = klarnaAt(it, m); if (k) r.kl.push({ it, k, v: k.share }); }
       else if (it.kind === "dep") { const v = depAt(it, m); const pot = S.pots.find(p => p.id === it.potId); if (v > 0 && pot) r.dep.push({ it, v, pot }); }
     }
@@ -587,14 +716,18 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     r.in.sort((a, b) => b.v - a.v); r.uit.sort((a, b) => b.v - a.v); r.kl.sort((a, b) => b.v - a.v);
     r.buy.sort((a, b) => String(b.it.date).localeCompare(String(a.it.date)));
     const sum = a => a.reduce((s, x) => s + x.v, 0), left = a => a.filter(x => !x.done).reduce((s, x) => s + x.v, 0);
-    r.ccStand = S.ccs[m] || null; r.ccDone = isPaid(m, "cc");
-    r.t = { in: sum(r.in), uit: sum(r.uit), buy: sum(r.buy), kl: sum(r.kl), sav: sum(r.dep), cc: r.ccStand ? Number(r.ccStand.amount) || 0 : 0 };
+    // creditcard: uitgaven van deze maand tellen voor je maandresultaat, het openstaande bedrag voor je rekening
+    r.ccOpen = S.ccOpen; r.ccCounts = m >= NOW;
+    // aankopen uit een spaarpotje raken je rekening niet
+    // aankopen met de creditcard tellen via de creditcard mee
+    r.buyAcc = r.buy.filter(x => !x.pot && x.it.via !== "cc"); r.buyPot = r.buy.filter(x => x.pot); r.buyCC = r.buy.filter(x => x.it.via === "cc");
+    r.t = { in: sum(r.in), uit: sum(r.uit), buy: sum(r.buyAcc), buyPot: sum(r.buyPot), buyCC: sum(r.buyCC), kl: sum(r.kl), sav: sum(r.dep), cc: r2(ccSpend(m)) };
     // afgevinkte Klarna-termijnen staan al op de creditcard, dus die tellen via de creditcard mee
     r.klLeft = left(r.kl); r.klOnCC = r.t.kl - r.klLeft;
     r.costs = r.t.uit + r.t.buy + r.klLeft + r.t.sav + r.t.cc;
     r.over = r.t.in - r.costs;
     r.inLeft = left(r.in);
-    r.costLeft = left(r.uit) + left(r.buy) + r.klLeft + left(r.dep) + (r.ccDone ? 0 : r.t.cc);
+    r.costLeft = left(r.uit) + left(r.buyAcc) + r.klLeft + left(r.dep) + (r.ccCounts ? Math.max(0, S.ccOpen) : 0);
     r.bal = balAt(m);
     r.expected = r.bal ? r.bal.amount + r.inLeft - r.costLeft : null;
     r.savTotal = S.pots.reduce((s, p) => s + potAt(p, m), 0);
@@ -604,7 +737,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     let f = null;
     const see = m => { if (isMonth(m) && (!f || m < f)) f = m; };
     for (const it of S.items) see(it.kind === "buy" ? String(it.date || "").slice(0, 7) : it.kind === "kl" ? it.start : it.kind === "dep" ? depStart(it) : histOf(it)[0].from);
-    [S.balances, S.ccs].forEach(o => Object.keys(o).forEach(see));
+    Object.keys(S.balances).forEach(see); S.ccLog.forEach(e => see(e.month));
     S.pots.forEach(p => Object.keys(p.snaps).forEach(see));
     return f;
   }
@@ -620,6 +753,12 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     return host ? host === "dark" : mq.matches;
   }
   const pal = id => PALETTE.find(x => x[0] === id) || PALETTE[0];
+  function applyGlow(dark = isDark()) {
+    const k = (Number(S.set.bg.strength) || 0) / 65;
+    const glow = (h, aDark, aLight) => k <= 0 ? "transparent" : dark ? `hsla(${h}, 50%, 40%, ${Math.min(.95, aDark * k).toFixed(3)})` : `hsla(${h}, 55%, 72%, ${Math.min(.95, aLight * k).toFixed(3)})`;
+    root.style.setProperty("--glow1", glow(S.set.bg.h1, .55, .5));
+    root.style.setProperty("--glow2", glow(S.set.bg.h2, .38, .3));
+  }
   function applyTheme() {
     if (S.set.theme === "auto") { if (themeIsOurs) { root.removeAttribute("data-theme"); themeIsOurs = false; } }
     else { root.setAttribute("data-theme", S.set.theme); themeIsOurs = true; }
@@ -633,11 +772,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     root.style.setProperty("--f-display", `${f[2]}, "Iowan Old Style", "Baskerville", "Times New Roman", serif`);
     root.style.setProperty("--dw", f[3]); root.style.setProperty("--di", f[4]); root.style.setProperty("--ds", f[5]);
     // achtergrondgloed
-    const hexA = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a.toFixed(3)})`; };
-    const k = { zacht: .5, normaal: 1, sterk: 1.55 }[S.set.bg.strength] || 1;
-    const glow = (id, aDark, aLight) => id === "none" ? "transparent" : hexA(dark ? pal(id)[2] : pal(id)[3], Math.min(.95, (dark ? aDark : aLight) * k));
-    root.style.setProperty("--glow1", glow(S.set.bg.top, .5, .5));
-    root.style.setProperty("--glow2", glow(S.set.bg.bottom, .34, .3));
+    applyGlow(dark);
     const mt = document.querySelector('meta[name="theme-color"]');
     if (mt) mt.setAttribute("content", dark ? "#100E0C" : "#EEE7DC");
   }
@@ -657,6 +792,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   function go(view) { S.view = view; if (S.editing) S.editing = false; document.body.classList.remove("editing"); render(); window.scrollTo({ top: 0 }); }
 
   function render() {
+    app.querySelectorAll("details[data-sec]").forEach(d => d.open ? S.openSec.add(d.dataset.sec) : S.openSec.delete(d.dataset.sec));
     const v = S.view;
     const monthNav = `<div class="month glass" aria-label="Maand kiezen"><button data-act="prev" aria-label="Vorige maand">‹</button><span class="num"><em>${esc(monthName(S.month, false))}</em>${S.month.slice(0, 4)}</span><button data-act="next" aria-label="Volgende maand">›</button></div>`;
     const brand = `<p class="brand" id="logoName">${esc(appName())}</p>`;
@@ -680,8 +816,13 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     let h = "";
     if (S.items.some(i => i.example) || S.pots.some(p => p.example)) h += `<div class="note glass"><span>Je ziet voorbeeldbedragen.</span><button class="btn small" data-act="unseed">Wis en begin zelf</button></div>`;
     h += hero(c, mN);
-    if (S.editing) h += `<p class="edithint">Sleep een tegel naar een andere plek. Kies rechtsboven de breedte.</p>`;
+    if (S.editing) h += `<p class="edithint">Sleep een tegel naar een andere plek. Kies rechtsboven de breedte, of verberg hem met −.</p>`;
     h += `<div class="grid" id="grid">${gridHtml(c)}</div>`;
+    if (S.editing) {
+      const hid = S.set.layout.filter(t => t.hidden);
+      h += `<div class="editbar">${hid.length ? `<p class="edithint" style="text-align:left;padding:0 2px">Verborgen tegels</p><div class="chips">${hid.map(t => `<button class="chip" data-unhide="${t.id}"><span class="dot" style="--c:${tileColor(t.id)}"></span>+ ${esc(tileName(t.id))}</button>`).join("")}</div>` : ""}
+        <div class="btns"><button class="btn" data-act="new-tile">+ Eigen tegel</button></div></div>`;
+    }
     return h;
   }
 
@@ -694,7 +835,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       ${S.month !== NOW ? `<div class="h-top"><p class="h-eye">${esc(monthName(S.month))}</p><button class="h-now" data-act="now">Naar nu</button></div>` : ""}
       <div class="h-duo">
         <button class="h-col h-bal" data-stand="bal" aria-label="Saldo bijwerken">
-          <span class="h-l">Op rekening<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3z"/></svg></span>
+          <span class="h-l">Op rekening${S.set.balLock ? `<svg class="i" viewBox="0 0 24 24" aria-label="vastgezet"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>` : `<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3z"/></svg>`}</span>
           <span class="h-num ${has && c.bal.amount < 0 ? "neg" : ""}">${has ? money(c.bal.amount) : "—"}</span>
           <span class="h-sub">${balSub}</span>
         </button>
@@ -711,14 +852,69 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     </section>`;
   }
 
+  function tileName(id) { const ct = S.set.custom.find(x => x.id === id); return ct ? ct.name : TILE_NAMES[id] || id; }
+  function tileColor(id) { const ct = S.set.custom.find(x => x.id === id); return ct ? colorOf(ct.color) : `var(--c-${id})`; }
+  const colorOf = id => isDark() ? pal(id)[3] : pal(id)[2];
+  const hideBtn = id => `<button class="tile-hide" data-hide="${id}" aria-label="${esc(tileName(id))} verbergen">−</button>`;
   function gridHtml(c) {
-    return S.set.layout.map(({ id, w }) =>
+    return S.set.layout.filter(t => !t.hidden).map(({ id, w }) =>
       `<div class="slot${drag && drag.id === id ? " ph" : ""}" data-tile="${id}" style="--w:${w}">${tileHtml(id, w, c)}</div>`).join("");
   }
   function sizer(id, w) {
     return `<div class="sizer" role="group" aria-label="Breedte">${WIDTHS.map(([n, l, a]) => `<button data-size="${id}:${n}" aria-pressed="${n === w}" aria-label="${a}">${l}</button>`).join("")}</div>`;
   }
+  function sourceLabel(ct) {
+    if (ct.src.startsWith("pot:")) { const p = S.pots.find(x => x.id === ct.src.slice(4)); return p ? "Spaarpotje " + p.name : "Spaarpotje"; }
+    if (ct.src.startsWith("cat:")) return "Vaste lasten: " + ct.src.slice(4);
+    const s = SOURCES.find(x => x[0] === ct.src); return s ? s[1] : "";
+  }
+  function klRest(m) {
+    let t = 0;
+    for (const it of S.items) {
+      if (it.kind !== "kl") continue;
+      const n = Number(it.terms) || 1, share = (Number(it.amount) || 0) / n;
+      for (let k = 0; k < n; k++) { const mm = addMonths(it.start, k); if (mm < m) continue; if (mm === m && isPaid(m, it.id)) continue; t += share; }
+    }
+    return t;
+  }
+  function customValue(ct, c) {
+    const src = ct.src;
+    if (src === "manual") return Number(ct.value) || 0;
+    if (src === "balance") return c.bal ? c.bal.amount : null;
+    if (src === "expected") return c.expected;
+    if (src === "over") return c.over;
+    if (src === "inLeft") return c.inLeft;
+    if (src === "costLeft") return c.costLeft;
+    if (src === "savings") return c.savTotal;
+    if (src === "ccOpen") return S.ccOpen;
+    if (src === "klRest") return klRest(S.month);
+    if (src === "perDay") {
+      if (c.expected == null || S.month < NOW) return null;
+      const [y, mo] = S.month.split("-").map(Number), dim = new Date(y, mo, 0).getDate();
+      const left = S.month === NOW ? dim - new Date().getDate() + 1 : dim;
+      return c.expected / Math.max(1, left);
+    }
+    if (src === "networth") {
+      const own = S.set.custom.filter(x => x.src === "manual" && x.inNet).reduce((s, x) => s + (Number(x.value) || 0), 0);
+      return (c.bal ? c.bal.amount : 0) + c.savTotal + own - Math.max(0, S.ccOpen) - klRest(S.month);
+    }
+    if (src.startsWith("pot:")) { const p = S.pots.find(x => x.id === src.slice(4)); return p ? potAt(p, S.month) : null; }
+    if (src.startsWith("cat:")) return c.uit.filter(r => (r.it.cat || "Overig") === src.slice(4)).reduce((s, r) => s + r.v, 0);
+    return null;
+  }
+  function customTile(ct, w, c, preview) {
+    const v = customValue(ct, c), col = colorOf(ct.color);
+    let sub = esc(sourceLabel(ct));
+    if (ct.src === "manual" && ct.at) sub = "Bijgewerkt " + esc(whenText(ct.at));
+    if (ct.src === "perDay" && v != null && S.month === NOW) { const [y, mo] = S.month.split("-").map(Number); const left = new Date(y, mo, 0).getDate() - new Date().getDate() + 1; sub = `Nog ${left} dag${left === 1 ? "" : "en"} deze maand`; }
+    const prog = ct.goal && v != null ? `<div class="t-prog"><i style="width:${Math.max(0, Math.min(100, v / ct.goal * 100)).toFixed(1)}%;background:${col}"></i></div><div class="t-sub num">${Math.round(v / ct.goal * 100)}% van ${eur.format(ct.goal)}</div>` : "";
+    return `<div class="tile glass" ${preview ? "" : `data-custom="${esc(ct.id)}"`}>${preview ? "" : sizer(ct.id, w) + hideBtn(ct.id)}
+      <div class="t-lbl"><span class="dot" style="--c:${col}"></span>${esc(ct.name || "Eigen tegel")}</div>
+      <div><div class="t-amt ${v != null && v < 0 ? "neg" : ""}">${v == null ? "—" : money(v)}</div><div class="t-sub">${sub}</div>${prog}</div></div>`;
+  }
   function tileHtml(id, w, c) {
+    const ct = S.set.custom.find(x => x.id === id);
+    if (ct) return customTile(ct, w, c);
     const head = (label, col) => `<div class="t-lbl"><span class="dot" style="--c:${col}"></span>${label}</div>`;
     const n = w >= 6 ? 5 : w >= 4 ? 3 : w === 3 ? 2 : 0;
     const list = (rows, fmt) => n && rows.length ? `<ul class="t-list">${rows.slice(0, n).map(fmt).join("")}${rows.length > n ? `<li class="more">en nog ${rows.length - n}</li>` : ""}</ul>` : "";
@@ -727,25 +923,29 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     if (id === "bal") {
       inner = `${head("Rekening", "var(--ink)")}<div><div class="t-amt ${c.bal && c.bal.amount < 0 ? "neg" : ""}">${c.bal ? money(c.bal.amount) : "—"}</div>
         <div class="t-sub">${c.bal ? "Bijgewerkt " + esc(whenText(c.bal.at)) : "Tik om in te vullen"}</div></div>`;
-      return `<div class="tile glass" data-stand="bal">${sizer(id, w)}${inner}</div>`;
+      return `<div class="tile glass" data-stand="bal">${sizer(id, w)}${hideBtn(id)}${inner}</div>`;
     }
     if (id === "cc") {
-      inner = `${head("Creditcard", "var(--c-cc)")}<div><div class="t-amt">${c.ccStand ? money(c.t.cc) : "—"}</div>
-        <div class="t-sub">${!c.ccStand ? "Tik voor je tussenstand" : c.ccDone ? "Afgeschreven" : "Gaat eind van de maand eraf"}${c.klOnCC > 0 ? ` · incl. ${eur.format(c.klOnCC)} Klarna` : ""}</div></div>`;
-      return `<div class="tile glass" data-stand="cc">${sizer(id, w)}${inner}</div>`;
+      const lp = lastPay();
+      const ev = S.ccLog.filter(e => e.month === S.month).sort((a, b) => (b.date + b.at).localeCompare(a.date + a.at));
+      const sub = S.ccLog.length ? "Openstaand" + (lp ? ` · afgelost ${new Date(lp.date + "T12:00").toLocaleDateString("nl-NL", { day: "numeric", month: "short" })}` : "") : "Tik om je stand in te vullen";
+      const li = e => `<li><span class="n">${esc(ccLabel(e))}</span><span class="v">${e.delta < 0 ? "−" : "+"} ${eur.format(Math.abs(e.delta))}</span></li>`;
+      inner = `${head("Creditcard", "var(--c-cc)")}<div><div class="t-amt">${S.ccLog.length ? money(S.ccOpen) : "—"}</div><div class="t-sub">${sub}</div></div>${n && ev.length ? `<ul class="t-list">${ev.slice(0, n).map(li).join("")}${ev.length > n ? `<li class="more">en nog ${ev.length - n}</li>` : ""}</ul>` : ""}`;
+      return `<div class="tile glass" data-open="cc">${sizer(id, w)}${hideBtn(id)}${inner}</div>`;
     }
     if (id === "sav") {
       const pots = S.pots.map(p => ({ p, v: potAt(p, S.month) }));
       const sub = c.t.sav ? `+ ${eur.format(c.t.sav)} inleg deze maand` : S.pots.length ? `${S.pots.length} potje${S.pots.length === 1 ? "" : "s"}` : "Tik om een potje te maken";
       const li = x => `<li><span class="ic">${icon(x.p.icon)}</span><span class="n">${esc(x.p.name)}</span>${w >= 4 && x.p.goal ? `<span class="pb"><i style="width:${Math.min(100, x.v / x.p.goal * 100).toFixed(1)}%"></i></span>` : ""}<span class="v">${eur.format(x.v)}</span></li>`;
       inner = `${head("Sparen", "var(--c-sav)")}<div><div class="t-amt">${money(c.savTotal)}</div><div class="t-sub">${sub}</div></div>${n && pots.length ? `<ul class="t-list">${pots.slice(0, n).map(li).join("")}${pots.length > n ? `<li class="more">en nog ${pots.length - n}</li>` : ""}</ul>` : ""}`;
-      return `<div class="tile glass" data-go="sav">${sizer(id, w)}${inner}</div>`;
+      return `<div class="tile glass" data-go="sav">${sizer(id, w)}${hideBtn(id)}${inner}</div>`;
     }
-    const b = BLOCKS[id], rows = c[id], total = c.t[id];
+    const b = BLOCKS[id], rows = c[id], total = c.t[id] + (id === "buy" ? c.t.buyPot + c.t.buyCC : 0);
     const done = rows.filter(r => r.done).length;
-    const sub = rows.length ? `${done} van ${rows.length} ${b.verb.toLowerCase()}` : id === "buy" ? "Nog geen aankopen" : id === "kl" ? "Geen termijnen" : "Nog niets ingevuld";
+    const sub = (rows.length ? `${done} van ${rows.length} ${b.verb.toLowerCase()}` : id === "buy" ? "Nog geen aankopen" : id === "kl" ? "Geen termijnen" : "Nog niets ingevuld")
+      + (id === "buy" && c.t.buyCC ? ` · ${eur.format(c.t.buyCC)} creditcard` : "") + (id === "buy" && c.t.buyPot ? ` · ${eur.format(c.t.buyPot)} uit potjes` : "");
     inner = `${head(b.title, b.c)}<div><div class="t-amt">${money(total)}</div><div class="t-sub">${sub}</div></div>${list(rows, rowLi)}`;
-    return `<div class="tile glass" data-open="${id}">${sizer(id, w)}${inner}</div>`;
+    return `<div class="tile glass" data-open="${id}">${sizer(id, w)}${hideBtn(id)}${inner}</div>`;
   }
 
   function checkRow(r, verb, meta, amtHtml) {
@@ -754,7 +954,31 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       <span class="amt">${amtHtml}</span></button></div>`;
   }
 
+  function ccLabel(e) {
+    if (e.kind === "pay") return "Afgelost";
+    if (e.kind === "kl") return "Klarna · " + (e.name || "termijn") + (e.delta < 0 ? " (teruggedraaid)" : "");
+    if (e.kind === "buy") return "Aankoop · " + (e.name || "");
+    return "Stand bijgewerkt";
+  }
+  function ccView() {
+    const mN = monthName(S.month, false);
+    const ev = S.ccLog.filter(e => e.month === S.month).sort((a, b) => (b.date + b.at).localeCompare(a.date + a.at));
+    const rows = ev.map(e => {
+      const d = new Date(e.date + "T12:00").toLocaleDateString("nl-NL", { day: "numeric", month: "short" });
+      const meta = e.kind === "pay" ? `Van je rekening · ${d}` : e.kind === "kl" ? `Termijn afgevinkt · ${d}` : e.kind === "buy" ? `Met je creditcard betaald · ${d}` : `Nieuwe stand ${eur.format(e.amount)} · ${d}`;
+      const inner = `<span class="txt"><span class="name">${esc(ccLabel(e))}</span><span class="meta num">${meta}</span></span><span class="amt">${e.delta < 0 ? "−" : "+"} ${eur.format(Math.abs(e.delta))}</span>`;
+      return `<div class="row">${e.kind === "pay" ? `<button class="row-main solo" data-ccpay="${esc(e.id)}">${inner}</button>` : `<div class="row-main solo">${inner}</div>`}</div>`;
+    }).join("");
+    return `<div class="dhead"><h1><span class="dot" style="--c:var(--c-cc)"></span>Creditcard</h1></div>
+      <section class="panel glass cc-card"><p class="eyebrow-s">Openstaand</p><div class="cc-big num">${money(S.ccOpen)}</div>
+        <div class="cc-two num"><div><span>Uitgegeven in ${esc(mN)}</span>${eur.format(ccSpend(S.month))}</div><div><span>Afgelost in ${esc(mN)}</span>${eur.format(ccPaidIn(S.month))}</div></div>
+        <div class="btns"><button class="btn primary" data-act="cc-pay" ${S.ccOpen > 0 ? "" : "disabled"}>Aflossen</button><button class="btn" data-act="cc-set">Stand bijwerken</button></div></section>
+      <h2 class="h2">${esc(mN.charAt(0).toUpperCase() + mN.slice(1))}</h2>
+      <div class="list glass">${rows || `<div class="empty-row">Nog niets in ${esc(mN)}.</div>`}</div>`;
+  }
+
   function detail(k) {
+    if (k === "cc") return ccView();
     const b = BLOCKS[k]; if (!b) return overview();
     const c = calc(S.month), rows = c[k], mN = monthName(S.month, false);
     const done = rows.filter(r => r.done).length;
@@ -765,21 +989,23 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
         if (hst[0].from === S.month) tag = " · nieuw"; else if (r.e.from === S.month) tag = " · gewijzigd";
         meta = (it.cat ? esc(it.cat) + " · " : "") + (r.e.freq === "maand" ? "per maand" : `${eur.format(r.e.amount)} ${FREQ_LABEL[r.e.freq]}`) + tag +
           (it.until ? ` · t/m ${esc(shortMonth(addMonths(it.until, -1)))}` : "");
-      } else if (k === "buy") meta = new Date(it.date + "T12:00").toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short" });
+      } else if (k === "buy") meta = new Date(it.date + "T12:00").toLocaleDateString("nl-NL", { weekday: "short", day: "numeric", month: "short" }) + (r.pot ? ` · uit potje ${esc(r.pot.name)}` : it.via === "cc" ? " · creditcard" : "");
       else meta = r.k.of === 1 ? "In één keer" : `Termijn ${r.k.nr} van ${r.k.of} · totaal ${eur.format(it.amount)}`;
       return checkRow(r, b.verb, meta, `${k === "in" ? "+" : "−"} ${eur.format(r.v)}`);
     }).join("");
     const explain = b.fixed ? "Gaat elke maand vanzelf mee. Vink af wat al " + (k === "in" ? "binnen is." : "is afgeschreven.")
       : k === "buy" ? "Losse uitgaven deze maand. Vink af wat al van je rekening is." : "Termijnen worden automatisch over de maanden verdeeld.";
     return `<div class="dhead"><h1><span class="dot" style="--c:${b.c}"></span>${b.title}</h1>
-      <p class="num"><span class="tot">${money(c.t[k])}</span> in ${esc(mN)}${rows.length ? ` · ${done} van ${rows.length} ${b.verb.toLowerCase()}` : ""}</p></div>
+      <p class="num"><span class="tot">${money(c.t[k] + (k === "buy" ? c.t.buyPot + c.t.buyCC : 0))}</span> in ${esc(mN)}${rows.length ? ` · ${done} van ${rows.length} ${b.verb.toLowerCase()}` : ""}</p></div>
       <div class="list glass">${rowHtml || `<div class="empty-row">Niets in ${esc(mN)}.</div>`}<button class="add" data-add="${k}">+ ${esc(b.add)}</button></div>`;
   }
 
   function potLine(p, c) {
     const deps = c.dep.filter(d => d.pot.id === p.id), inleg = deps.reduce((s, d) => s + d.v, 0), v = potAt(p, S.month);
+    const opn = c.buyPot.filter(x => x.pot.id === p.id).reduce((s, x) => s + x.v, 0);
     const parts = [];
     if (inleg) parts.push(`+ ${eur.format(inleg)} deze maand`);
+    if (opn) parts.push(`− ${eur.format(opn)} opgenomen`);
     if (p.goal) parts.push(`${Math.round(v / p.goal * 100)}% van ${eur.format(p.goal)}`);
     return { v, sub: parts.join(" · ") || "Geen inleg deze maand" };
   }
@@ -804,14 +1030,15 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const snapM = Object.keys(p.snaps).filter(k => k <= S.month).sort().pop();
     const snap = snapM ? p.snaps[snapM] : null;
     const deps = c.dep.filter(d => d.pot.id === p.id);
-    const rows = deps.map(r => checkRow(r, "Overgemaakt", r.it.once ? "Eenmalig" : "Elke maand", `+ ${eur.format(r.v)}`)).join("");
+    const rows = deps.map(r => checkRow(r, "Overgemaakt", r.it.once ? "Eenmalig" : "Elke maand", `+ ${eur.format(r.v)}`)).join("")
+      + c.buyPot.filter(x => x.pot.id === p.id).map(r => checkRow(r, "Opgenomen", "Aankoop · " + new Date(r.it.date + "T12:00").toLocaleDateString("nl-NL", { day: "numeric", month: "short" }), `− ${eur.format(r.v)}`)).join("");
     return `<section class="pothead glass"><span class="p-ic">${icon(p.icon)}</span><h1>${esc(p.name)}</h1>
         <p class="hint">Verwacht eind ${esc(mN)}</p><div class="big num">${money(v)}</div>
         ${p.goal ? `<div class="prog"><i style="width:${Math.min(100, v / p.goal * 100).toFixed(1)}%"></i></div><p class="hint num">${Math.round(v / p.goal * 100)}% van je doel van ${eur.format(p.goal)}${v < p.goal ? ` · nog ${eur.format(p.goal - v)}` : " · doel bereikt"}</p>` : ""}
         <p class="hint">${snap ? `Laatst ingevuld: ${eur.format(snap.amount)} in ${esc(monthName(snapM))}` : "Nog geen bedrag ingevuld. Alleen je stortingen tellen mee."}</p>
         <div class="btns"><button class="btn primary" data-pot-bal="${esc(p.id)}">Bedrag bijwerken</button><button class="btn" data-dep="${esc(p.id)}">+ Storting</button></div></section>
-      <h2 class="h2">Stortingen in ${esc(mN)}</h2>
-      <div class="list glass">${rows || `<div class="empty-row">Geen stortingen in ${esc(mN)}.</div>`}<button class="add" data-dep="${esc(p.id)}">+ Storting toevoegen</button></div>
+      <h2 class="h2">${esc(mN.charAt(0).toUpperCase() + mN.slice(1))}</h2>
+      <div class="list glass">${rows || `<div class="empty-row">Geen stortingen of opnames in ${esc(mN)}.</div>`}<button class="add" data-dep="${esc(p.id)}">+ Storting toevoegen</button></div>
       <button class="link" data-pot-edit="${esc(p.id)}">Potje bewerken of verwijderen</button>`;
   }
 
@@ -830,41 +1057,97 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     return `<h1 class="h2">Maanden</h1><div class="list glass">${rows}</div>`;
   }
 
+  const hueName = h => ["Rood", "Oranje", "Amber", "Geel", "Olijf", "Groen", "Groen", "Zeegroen", "Petrol", "Blauw", "Blauw", "Indigo", "Paars", "Pruim", "Roze", "Bordeaux", "Rood"][Math.round(h / 22.5) % 17];
   function more() {
-    const dark = isDark();
-    const colorRows = COLOR_TARGETS.map(([key, label, sub]) => {
-      const cur = S.set.colors[key];
-      return `<div class="crow"><span class="clabel">${esc(label)} <small>${esc(sub || pal(cur)[1])}</small></span>
-        <div class="swatches" role="radiogroup" aria-label="Kleur voor ${esc(label)}">${PALETTE.map(([id, nm, l, d]) =>
-          `<button class="sw" role="radio" aria-checked="${id === cur}" aria-label="${nm}" title="${nm}" data-color="${key}:${id}" style="--sw:${dark ? d : l}"></button>`).join("")}</div></div>`;
-    }).join("");
     const th = [["auto", "Automatisch"], ["light", "Licht"], ["dark", "Donker"]];
+    const open = id => S.openSec.has(id) ? "open" : "";
     let restore = "";
     if (S.pendingRestore) {
       restore = `<div class="confirm"><p>Back-up terugzetten?</p>
         <p class="hint">Dit vervangt alles wat nu in de app staat door de back-up${S.pendingRestore.date ? " van " + esc(niceDate(S.pendingRestore.date)) : ""} (${S.pendingRestore.data.items.length} posten, ${S.pendingRestore.data.pots.length} potjes).</p>
         <div class="btns"><button class="btn danger solid" data-act="restore-yes">Terugzetten</button><button class="btn" data-act="restore-no">Annuleren</button></div></div>`;
+      S.openSec.add("data");
     }
     const hasEx = S.items.some(i => i.example) || S.pots.some(p => p.example);
+    const colorRows = COLOR_TARGETS.map(([key, label]) => `<div class="srow"><span class="dot" style="--c:${colorOf(S.set.colors[key])}"></span><label for="col-${key}">${esc(label)}</label>
+      <select id="col-${key}" data-colsel="${key}">${PALETTE.map(([id, nm]) => `<option value="${id}" ${id === S.set.colors[key] ? "selected" : ""}>${nm}</option>`).join("")}</select></div>`).join("");
+    const tiles = S.set.layout.map(t => {
+      const ct = S.set.custom.find(x => x.id === t.id);
+      return `<div class="srow"><span class="dot" style="--c:${tileColor(t.id)}"></span><span class="lbl">${esc(tileName(t.id))}${ct ? ` <button class="link" data-custom="${esc(ct.id)}" style="display:inline;padding:0 0 0 6px">Aanpassen</button>` : ""}</span>
+        <label class="switch" aria-label="${esc(tileName(t.id))} tonen"><input type="checkbox" data-vis="${t.id}" ${t.hidden ? "" : "checked"}><span></span></label></div>`;
+    }).join("");
+    const shown = S.set.layout.filter(t => !t.hidden).length;
     return `<h1 class="h2">Instellingen</h1>
-      <section class="panel glass"><h3>Weergave</h3>
+      <details class="sec glass" data-sec="view" ${open("view")}><summary><b>Weergave</b><small>${{ auto: "Automatisch", light: "Licht", dark: "Donker" }[S.set.theme]} · ${esc(appName())}</small></summary><div class="sec-body">
         <fieldset class="field"><legend>Licht of donker</legend><div class="seg">${th.map(([v, l]) => `<input type="radio" name="theme" id="th-${v}" value="${v}" ${S.set.theme === v ? "checked" : ""}><label for="th-${v}">${l}</label>`).join("")}</div></fieldset>
-        <div class="field"><label for="set-name">Naam bovenin</label><input id="set-name" maxlength="20" autocomplete="off" value="${esc(S.set.name)}" placeholder="Saldo"></div></section>
-      <section class="panel glass"><h3>Kleuren</h3>${colorRows}<button class="link" data-act="reset-colors">Standaardkleuren terugzetten</button></section>
-      <section class="panel glass"><h3>Achtergrond</h3>${[["top", "Gloed linksboven"], ["bottom", "Gloed rechtsonder"]].map(([pos, label]) => {
-        const cur = S.set.bg[pos];
-        return `<div class="crow"><span class="clabel">${label} <small>${cur === "none" ? "Geen" : esc(pal(cur)[1])}</small></span>
-          <div class="swatches" role="radiogroup" aria-label="${label}"><button class="sw sw-none" role="radio" aria-checked="${cur === "none"}" aria-label="Geen" title="Geen" data-bg="${pos}:none"></button>${PALETTE.map(([id, nm, l, d]) =>
-            `<button class="sw" role="radio" aria-checked="${id === cur}" aria-label="${nm}" title="${nm}" data-bg="${pos}:${id}" style="--sw:${dark ? l : d}"></button>`).join("")}</div></div>`;
-      }).join("")}
-        <fieldset class="field"><legend>Sterkte</legend><div class="seg">${[["zacht", "Zacht"], ["normaal", "Normaal"], ["sterk", "Sterk"]].map(([v, l]) => `<input type="radio" name="bgs" id="bgs-${v}" value="${v}" ${S.set.bg.strength === v ? "checked" : ""}><label for="bgs-${v}">${l}</label>`).join("")}</div></fieldset>
-        <button class="link" data-act="reset-bg">Standaard achtergrond terugzetten</button></section>
-      <section class="panel glass"><h3>Indeling</h3><p class="hint">Houd op het overzicht een tegel ingedrukt om hem te verschuiven of breder te maken.</p>
-        <div class="btns"><button class="btn" data-act="edit-layout">Indeling aanpassen</button><button class="btn" data-act="reset-layout">Standaard indeling</button></div></section>
-      <section class="panel glass"><h3>Back-up en Excel</h3>
+        <div class="field"><label for="set-name">Naam bovenin</label><input id="set-name" maxlength="20" autocomplete="off" value="${esc(S.set.name)}" placeholder="Saldo"></div></div></details>
+      <details class="sec glass" data-sec="colors" ${open("colors")}><summary><b>Kleuren</b><small>${COLOR_TARGETS.length} onderdelen</small></summary><div class="sec-body">
+        ${colorRows}<button class="link" data-act="reset-colors">Standaardkleuren terugzetten</button></div></details>
+      <details class="sec glass" data-sec="bg" ${open("bg")}><summary><b>Achtergrond</b><small id="bg-sum">${hueName(S.set.bg.h1)} en ${hueName(S.set.bg.h2).toLowerCase()}</small></summary><div class="sec-body">
+        <div class="srow col"><span class="lbl"><label for="bg-h1">Gloed linksboven</label><small id="bg-h1-n">${hueName(S.set.bg.h1)}</small></span><input type="range" class="hue" id="bg-h1" min="0" max="360" step="1" value="${S.set.bg.h1}" data-bgrange="h1" style="--thumb:hsl(${S.set.bg.h1} 50% 45%)"></div>
+        <div class="srow col"><span class="lbl"><label for="bg-h2">Gloed rechtsonder</label><small id="bg-h2-n">${hueName(S.set.bg.h2)}</small></span><input type="range" class="hue" id="bg-h2" min="0" max="360" step="1" value="${S.set.bg.h2}" data-bgrange="h2" style="--thumb:hsl(${S.set.bg.h2} 50% 45%)"></div>
+        <div class="srow col"><span class="lbl"><label for="bg-s">Sterkte</label><small id="bg-s-n">${S.set.bg.strength}%</small></span><input type="range" id="bg-s" min="0" max="100" step="1" value="${S.set.bg.strength}" data-bgrange="strength" style="--track:linear-gradient(90deg, var(--glass-line), var(--accent))"></div>
+        <button class="link" data-act="reset-bg">Standaard achtergrond terugzetten</button></div></details>
+      <details class="sec glass" data-sec="tiles" ${open("tiles")}><summary><b>Tegels</b><small>${shown} van ${S.set.layout.length} zichtbaar</small></summary><div class="sec-body">
+        ${tiles}
+        <div class="btns"><button class="btn primary" data-act="new-tile">+ Eigen tegel</button><button class="btn" data-act="edit-layout">Indeling aanpassen</button><button class="btn" data-act="reset-layout">Standaard indeling</button></div></div></details>
+      <details class="sec glass" data-sec="data" ${open("data")}><summary><b>Back-up en Excel</b><small>${S.lastBackup ? "Laatste " + esc(new Date(S.lastBackup).toLocaleDateString("nl-NL", { day: "numeric", month: "short" })) : "Nog geen back-up"}</small></summary><div class="sec-body">
         <p class="hint">Alles staat alleen op dit toestel. ${S.lastBackup ? "Laatste back-up: " + esc(niceDate(S.lastBackup)) + "." : "Er is nog geen back-up gemaakt."}</p>
-        <div class="btns"><button class="btn primary" data-act="backup">Back-up maken</button><button class="btn" data-act="excel">Download als Excel</button><button class="btn" data-act="restore">Back-up terugzetten</button></div>${restore}</section>
-      <section class="panel glass"><h3>Voorbeelden</h3><div class="btns">${hasEx ? `<button class="btn" data-act="unseed">Voorbeelden wissen</button>` : `<button class="btn" data-act="seed">Voorbeelden laden</button>`}</div></section>`;
+        <div class="btns"><button class="btn primary" data-act="backup">Back-up maken</button><button class="btn" data-act="excel">Download als Excel</button><button class="btn" data-act="restore">Back-up terugzetten</button></div>${restore}</div></details>
+      <details class="sec glass" data-sec="ex" ${open("ex")}><summary><b>Voorbeelden</b><small>${hasEx ? "Aan" : "Uit"}</small></summary><div class="sec-body">
+        <div class="btns">${hasEx ? `<button class="btn" data-act="unseed">Voorbeelden wissen</button>` : `<button class="btn" data-act="seed">Voorbeelden laden</button>`}</div></div></details>`;
+  }
+
+  /* ---------- eigen tegels ---------- */
+  function openCustom(ct) {
+    const isEdit = !!ct;
+    const draft = isEdit ? { ...ct } : { id: "c_" + newId().replace(/-/g, "").slice(0, 10), name: "", color: "brons", src: "perDay", goal: null, value: 0, at: null, inNet: false };
+    const lay = isEdit ? S.set.layout.find(t => t.id === ct.id) : null;
+    let w = lay ? lay.w : 3;
+    const opts = SOURCES.map(([v, l]) => `<option value="${v}" ${draft.src === v ? "selected" : ""}>${l}</option>`).join("")
+      + (S.pots.length ? `<optgroup label="Spaarpotje">${S.pots.map(p => `<option value="pot:${esc(p.id)}" ${draft.src === "pot:" + p.id ? "selected" : ""}>${esc(p.name)}</option>`).join("")}</optgroup>` : "")
+      + `<optgroup label="Vaste lasten per soort">${CATS.map(k => `<option value="cat:${esc(k)}" ${draft.src === "cat:" + k ? "selected" : ""}>${esc(k)}</option>`).join("")}</optgroup>`;
+    mount(`<form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t" novalidate>
+      <h2 id="sh-t">${isEdit ? "Tegel aanpassen" : "Eigen tegel"}</h2>
+      <div class="preview" id="cp-prev"></div>
+      <div class="field"><label for="cp-name">Naam</label><input id="cp-name" maxlength="40" autocomplete="off" placeholder="Bijv. Per dag, Beleggingen, Wonen" value="${esc(draft.name)}"></div>
+      <div class="field"><label for="cp-src">Wat laat de tegel zien?</label><select id="cp-src" class="pick" style="border-radius:var(--r-sm)">${opts}</select><p class="hint" id="cp-src-h"></p></div>
+      <div id="cp-man">${amountField("cp-val", "Bedrag", isEdit && draft.src === "manual" ? draft.value : "")}
+        <button type="button" class="toggle" id="cp-net" aria-pressed="${draft.inNet}" style="margin-top:10px"><span class="chk" style="width:30px;padding:0" aria-pressed="${draft.inNet}">${CHECK}</span>Telt mee in mijn vermogen</button></div>
+      <div class="srow" style="border:0;padding:0"><label for="cp-col">Kleur</label><select id="cp-col">${PALETTE.map(([id, nm]) => `<option value="${id}" ${id === draft.color ? "selected" : ""}>${nm}</option>`).join("")}</select></div>
+      <div class="srow" style="border:0;padding:0"><label for="cp-w">Breedte</label><select id="cp-w">${WIDTHS.map(([n, l, a]) => `<option value="${n}" ${n === w ? "selected" : ""}>${a} (${l})</option>`).join("")}</select></div>
+      ${amountField("cp-goal", "Doel (mag leeg)", draft.goal || "")}
+      ${footer(isEdit)}</form>`, isEdit ? null : "cp-name");
+    const read = () => {
+      draft.name = $("cp-name").value.trim() || (sourceLabel({ src: $("cp-src").value }) || "Eigen tegel");
+      draft.src = $("cp-src").value; draft.color = $("cp-col").value; w = Number($("cp-w").value);
+      const g = parseAmount($("cp-goal").value); draft.goal = g > 0 ? g : null;
+      if (draft.src === "manual") { const v = parseAmount($("cp-val").value, true); draft.value = isNaN(v) ? 0 : v; }
+    };
+    const upd = () => {
+      read();
+      $("cp-man").hidden = draft.src !== "manual";
+      const sdef = SOURCES.find(x => x[0] === draft.src); $("cp-src-h").textContent = sdef ? sdef[2] : "";
+      const show = { ...draft, at: draft.src === "manual" ? Date.now() : null };
+      $("cp-prev").innerHTML = `<div class="slot" style="--w:${w}">${customTile(show, w, calc(S.month), true)}</div>`;
+    };
+    upd();
+    host.querySelectorAll("input, select").forEach(el => { el.addEventListener("input", upd); el.addEventListener("change", upd); });
+    $("cp-net").onclick = () => { draft.inNet = !draft.inNet; $("cp-net").setAttribute("aria-pressed", draft.inNet); $("cp-net").querySelector(".chk").setAttribute("aria-pressed", draft.inNet); };
+    if (isEdit) $("f-del").onclick = () => {
+      confirmDelete(`<p>“${esc(ct.name)}” verwijderen?</p><div class="btns"><button type="button" class="btn danger solid" id="f-del-yes">Tegel verwijderen</button></div>`);
+      $("f-del-yes").onclick = () => { S.set.custom = S.set.custom.filter(x => x.id !== ct.id); S.set.layout = S.set.layout.filter(t => t.id !== ct.id); persist(); closeSheet(); render(); toast("Tegel verwijderd"); };
+    };
+    $("sheet").addEventListener("submit", e => {
+      e.preventDefault(); read();
+      if (draft.src === "manual" && isNaN(parseAmount($("cp-val").value, true)) && $("cp-val").value.trim()) return showErr("Vul een bedrag in, bijvoorbeeld 2.500.", "cp-val");
+      const prevVal = isEdit ? ct.value : null;
+      const out = { id: draft.id, name: draft.name, color: draft.color, src: draft.src, goal: draft.goal, value: draft.value, inNet: draft.inNet,
+        at: draft.src === "manual" ? (isEdit && prevVal === draft.value && ct.at ? ct.at : Date.now()) : null };
+      if (isEdit) { Object.assign(ct, out); const l = S.set.layout.find(t => t.id === ct.id); if (l) { l.w = w; l.hidden = false; } }
+      else { S.set.custom.push(out); S.set.layout.push({ id: out.id, w, hidden: false }); }
+      persist(); closeSheet(); render(); toast(isEdit ? "Tegel opgeslagen" : "Tegel toegevoegd aan je overzicht");
+    });
   }
 
   /* ---------- tegels verschuiven ---------- */
@@ -939,7 +1222,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   }
   document.addEventListener("pointerdown", e => {
     if (S.view !== "overview" || e.button > 0) return;
-    const slot = e.target.closest("#grid .slot"); if (!slot || e.target.closest(".sizer")) return;
+    const slot = e.target.closest("#grid .slot"); if (!slot || e.target.closest(".sizer, .tile-hide")) return;
     const id = slot.dataset.tile;
     if (S.editing) { e.preventDefault(); suppressClick = true; startDrag(id, e.clientX, e.clientY); return; }
     press = { id, x: e.clientX, y: e.clientY, lx: e.clientX, ly: e.clientY };
@@ -967,15 +1250,22 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const t = e.target;
     const sz = t.closest("[data-size]");
     if (sz) { const [id, w] = sz.dataset.size.split(":"); const it = S.set.layout.find(x => x.id === id); if (it) { it.w = Number(w); persist(); renderGridAnimated(); } return; }
+    const hd = t.closest("[data-hide]");
+    if (hd) { const l = S.set.layout.find(x => x.id === hd.dataset.hide); if (l) { l.hidden = true; persist(); render(); toast(`${tileName(l.id)} verborgen`); } return; }
+    const uh = t.closest("[data-unhide]");
+    if (uh) { const l = S.set.layout.find(x => x.id === uh.dataset.unhide); if (l) { l.hidden = false; persist(); render(); } return; }
+    if (t.closest("[data-act='new-tile']")) return openCustom();
     if (S.editing && S.view === "overview") {
       if (t.closest("[data-act='edit-done']") || !t.closest(".slot")) { setEditing(false); }
       return;
     }
+    const cu = t.closest("[data-custom]"); if (cu) { const ct = S.set.custom.find(x => x.id === cu.dataset.custom); if (ct) openCustom(ct); return; }
     const tab = t.closest("[data-tab]"); if (tab) return go(tab.dataset.tab);
     if (t.closest("#tabAdd")) return openChooser();
     const pd = t.closest("[data-paid]");
     if (pd) { togglePaid(pd.dataset.paid); return; }
     const st = t.closest("[data-stand]"); if (st) return openStand(st.dataset.stand);
+    const cp = t.closest("[data-ccpay]"); if (cp) { const e = S.ccLog.find(x => x.id === cp.dataset.ccpay); if (e) openPay(e); return; }
     const ad = t.closest("[data-add]"); if (ad) return openSheet(ad.dataset.add);
     const ed = t.closest("[data-edit]");
     if (ed) { const it = S.items.find(i => i.id === ed.dataset.edit); if (it) it.kind === "dep" ? openDeposit({ item: it }) : openSheet(it.kind, it); return; }
@@ -988,8 +1278,6 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const hm = t.closest("[data-month]"); if (hm) { S.month = hm.dataset.month; return go("overview"); }
     const fo = t.closest("[data-font]");
     if (fo) { S.set.font = fo.dataset.font; persist(); applyTheme(); render(); return; }
-    const bgb = t.closest("[data-bg]");
-    if (bgb) { const [pos, id] = bgb.dataset.bg.split(":"); S.set.bg[pos] = id; persist(); applyTheme(); render(); return; }
     const sw = t.closest("[data-color]");
     if (sw) { const [k, id] = sw.dataset.color.split(":"); S.set.colors[k] = id; persist(); applyTheme(); render(); return; }
     const a = t.closest("[data-act]"); if (!a) return;
@@ -998,8 +1286,10 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       case "next": S.month = addMonths(S.month, 1); render(); break;
       case "now": S.month = NOW; render(); break;
       case "new-pot": openPot(); break;
+      case "cc-pay": openPay(); break;
+      case "cc-set": openStand("cc"); break;
       case "edit-layout": S.view = "overview"; setEditing(true); window.scrollTo({ top: 0 }); break;
-      case "reset-layout": S.set.layout = normLayout([]); persist(); toast("Standaard indeling terug"); break;
+      case "reset-layout": S.set.layout = normLayout([], true, S.set.custom.map(x => x.id)); persist(); render(); toast("Standaard indeling terug"); break;
       case "reset-bg": S.set.bg = Object.assign({}, DEFAULT_BG); persist(); applyTheme(); render(); toast("Standaard achtergrond terug"); break;
       case "reset-colors": S.set.colors = Object.assign({}, DEFAULT_COLORS); persist(); applyTheme(); render(); toast("Standaardkleuren terug"); break;
       case "seed": seed(); toast("Voorbeelden geladen"); break;
@@ -1010,16 +1300,32 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       case "restore-no": S.pendingRestore = null; render(); break;
       case "restore-yes": {
         const d = S.pendingRestore.data; S.pendingRestore = null;
-        Object.assign(S, { items: d.items, balances: d.balances, ccs: d.ccs, pots: d.pots, paid: d.paid, set: d.set });
+        Object.assign(S, { items: d.items, balances: d.balances, ccOpen: d.ccOpen, ccLog: d.ccLog, pots: d.pots, paid: d.paid, set: d.set });
         S.month = NOW; persist(); applyTheme(); go("overview"); toast("Back-up teruggezet"); break;
       }
     }
   });
   document.addEventListener("change", e => {
     if (e.target.name === "theme") { S.set.theme = e.target.value; persist(); applyTheme(); render(); }
-    if (e.target.name === "bgs") { S.set.bg.strength = e.target.value; persist(); applyTheme(); }
+    if (e.target.dataset.colsel) { S.set.colors[e.target.dataset.colsel] = e.target.value; persist(); applyTheme(); render(); }
+    if (e.target.dataset.vis) { const l = S.set.layout.find(x => x.id === e.target.dataset.vis); if (l) { l.hidden = !e.target.checked; persist(); render(); } }
+    if (e.target.dataset.bgrange) persist();
   });
+  document.addEventListener("toggle", e => {
+    const d = e.target; if (!d.matches || !d.matches("details[data-sec]")) return;
+    if (d.open) S.openSec.add(d.dataset.sec); else S.openSec.delete(d.dataset.sec);
+  }, true);
   document.addEventListener("input", e => {
+    const br = e.target.dataset && e.target.dataset.bgrange;
+    if (br) {
+      const v = Number(e.target.value); S.set.bg[br] = v; applyGlow();
+      if (br === "strength") { const n = $("bg-s-n"); if (n) n.textContent = v + "%"; }
+      else {
+        e.target.style.setProperty("--thumb", `hsl(${v} 50% 45%)`);
+        const n = $(`bg-${br}-n`); if (n) n.textContent = hueName(v);
+        const sm = $("bg-sum"); if (sm) sm.textContent = `${hueName(S.set.bg.h1)} en ${hueName(S.set.bg.h2).toLowerCase()}`;
+      }
+    }
     if (e.target.id === "set-name") { S.set.name = e.target.value; persist(); const l = document.getElementById("logoName"); if (l) l.textContent = appName(); }
   });
 
@@ -1047,13 +1353,14 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const opt = (k, title, sub, c) => `<button type="button" data-pick="${k}"><b><span class="dot" style="--c:${c}"></span>${title}</b><small>${sub}</small></button>`;
     mount(`<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t"><h2 id="sh-t">Wat wil je toevoegen?</h2>
       <div class="choose">${opt("buy", "Aankoop", "Pinbetaling of losse uitgave", "var(--c-buy)")}${opt("dep", "Storting", "Naar een spaarpotje", "var(--c-sav)")}
-      ${opt("cc", "Creditcard", "Tussenstand bijwerken", "var(--c-cc)")}${opt("kl", "Klarna", "Aankoop of termijnen", "var(--c-kl)")}
+      ${opt("cc", "Creditcard", "Stand of aflossen", "var(--c-cc)")}${opt("kl", "Klarna", "Aankoop of termijnen", "var(--c-kl)")}
       ${opt("uit", "Vaste last", "Elke maand", "var(--c-uit)")}${opt("in", "Inkomen", "Elke maand", "var(--c-in)")}
       ${opt("bal", "Saldo", "Stand lopende rekening", "var(--ink)")}${opt("pot", "Spaarpotje", "Nieuw spaardoel", "var(--c-sav)")}</div>
       <div class="btns"><div class="right"><button type="button" class="btn" id="f-cancel">Annuleren</button></div></div></div>`);
     host.querySelectorAll("[data-pick]").forEach(b => b.onclick = () => {
       const k = b.dataset.pick; closeSheet();
-      if (k === "bal" || k === "cc") openStand(k);
+      if (k === "bal") openStand(k);
+      else if (k === "cc") go("detail:cc");
       else if (k === "dep") S.pots.length ? openDeposit({}) : (toast("Maak eerst een spaarpotje"), openPot());
       else if (k === "pot") openPot();
       else openSheet(k);
@@ -1061,28 +1368,61 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   }
 
   function openStand(type) {
-    const isCC = type === "cc", store = isCC ? S.ccs : S.balances, cur = isCC ? store[S.month] : balAt(S.month);
-    const paid = isCC && isPaid(S.month, "cc");
+    const isCC = type === "cc", cur = isCC ? null : balAt(S.month);
+    const val = isCC ? (S.ccLog.length ? S.ccOpen : "") : (cur ? cur.amount : "");
     mount(`<form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t" novalidate>
-      <h2 id="sh-t"><span class="dot" style="--c:${isCC ? "var(--c-cc)" : "var(--ink)"}"></span>${isCC ? "Creditcard" : "Lopende rekening"}</h2>
-      ${amountField("f-amt", isCC ? "Tussenstand deze maand" : "Wat staat er nu op je rekening?", cur ? cur.amount : "")}
-      <p class="hint">${esc(monthName(S.month))}${cur ? " · vorige stand " + esc(whenText(cur.at)) : ""}. ${isCC ? "Dit bedrag gaat eind van de maand van je rekening af." : "Rood staan? Zet er een min voor."}</p>
-      ${isCC ? `<button type="button" class="toggle" id="f-ccpaid" aria-pressed="${paid}"><span class="chk" style="width:30px;padding:0" aria-pressed="${paid}">${CHECK}</span>Al afgeschreven van mijn rekening</button>` : ""}
+      <h2 id="sh-t"><span class="dot" style="--c:${isCC ? "var(--c-cc)" : "var(--ink)"}"></span>${isCC ? "Stand creditcard" : "Lopende rekening"}</h2>
+      ${amountField("f-amt", isCC ? "Wat staat er nu open op je creditcard?" : "Wat staat er nu op je rekening?", val)}
+      <p class="hint">${isCC ? "Kijk in je creditcard-app. Het verschil met de vorige stand telt als uitgave in " + esc(monthName(S.month, false)) + "." : esc(monthName(S.month)) + (cur ? " · vorige stand " + esc(whenText(cur.at)) : "") + ". Rood staan? Zet er een min voor."}</p>
+      ${isCC ? "" : `<div class="srow" style="border-top:1px solid var(--glass-line);padding-top:12px"><span class="lbl">Saldo vastzetten<small class="hint" style="display:block;margin-top:2px" id="f-lock-h">${S.set.balLock ? "Vinkjes en aflossingen veranderen je saldo niet. Alleen jij past het aan." : "Vinkjes en aflossingen passen je saldo vanzelf aan."}</small></span>
+        <label class="switch" aria-label="Saldo vastzetten"><input type="checkbox" id="f-lock" ${S.set.balLock ? "checked" : ""}><span></span></label></div>`}
       ${footer(false)}</form>`, "f-amt");
-    let ccPaid = paid;
-    if (isCC) $("f-ccpaid").onclick = () => { ccPaid = !ccPaid; $("f-ccpaid").setAttribute("aria-pressed", ccPaid); $("f-ccpaid").querySelector(".chk").setAttribute("aria-pressed", ccPaid); };
+    if (!isCC) $("f-lock").onchange = e => {
+      S.set.balLock = e.target.checked; persist(); render();
+      $("f-lock-h").textContent = S.set.balLock ? "Vinkjes en aflossingen veranderen je saldo niet. Alleen jij past het aan." : "Vinkjes en aflossingen passen je saldo vanzelf aan.";
+    };
     $("sheet").addEventListener("submit", e => {
       e.preventDefault();
       const v = parseAmount($("f-amt").value, !isCC);
       if (isNaN(v)) return showErr("Vul een bedrag in, bijvoorbeeld 1.250,00.", "f-amt");
-      if (isCC) {
-        // creditcard afgeschreven: het bedrag gaat (eenmalig) van je saldo af
-        const before = paid ? Number(cur ? cur.amount : 0) || 0 : 0, after = ccPaid ? v : 0;
-        adjustBalance(S.month, -(after - before));
-        setPaid(S.month, "cc", ccPaid);
-      }
-      store[S.month] = { ...(store[S.month] || {}), amount: v, at: Date.now() };
-      persist(); closeSheet(); render(); toast(isCC ? "Tussenstand bijgewerkt" : "Saldo bijgewerkt");
+      if (isCC) { const d = r2(v - S.ccOpen); if (d || !S.ccLog.length) ccAdd("set", d, { amount: v }); }
+      else S.balances[S.month] = { ...(S.balances[S.month] || {}), amount: v, at: Date.now() };
+      persist(); closeSheet(); render(); toast(isCC ? "Stand bijgewerkt" : "Saldo bijgewerkt");
+    });
+  }
+
+  function openPay(existing) {
+    if (existing) {
+      mount(`<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t"><h2 id="sh-t"><span class="dot" style="--c:var(--c-cc)"></span>Aflossing</h2>
+        <p class="num">${eur.format(existing.amount)} op ${esc(new Date(existing.date + "T12:00").toLocaleDateString("nl-NL", { day: "numeric", month: "long" }))}</p>
+        <div class="confirm"><p>Deze aflossing verwijderen?</p><p class="hint">Het bedrag komt weer open te staan op je creditcard en terug op je saldo.</p>
+          <div class="btns"><button type="button" class="btn danger solid" id="f-del-yes">Verwijderen</button></div></div>
+        <div class="btns"><div class="right"><button type="button" class="btn" id="f-cancel">Sluiten</button></div></div></div>`);
+      $("f-del-yes").onclick = () => { ccRemove(existing); adjustBalance(existing.month, existing.amount); persist(); closeSheet(); render(); toast("Aflossing verwijderd"); };
+      return;
+    }
+    const open = Math.max(0, S.ccOpen);
+    const prevSpend = r2(ccSpend(addMonths(S.month, -1)));
+    const prevName = monthName(addMonths(S.month, -1), false);
+    const defDate = S.month === ym(new Date()) ? today() : S.month + "-01";
+    mount(`<form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t" novalidate>
+      <h2 id="sh-t"><span class="dot" style="--c:var(--c-cc)"></span>Aflossen</h2>
+      ${amountField("f-amt", "Bedrag", open || "")}
+      <div class="quick"><button type="button" class="btn small" data-q="${open}">Alles · ${eur.format(open)}</button>${prevSpend > 0 && prevSpend < open ? `<button type="button" class="btn small" data-q="${prevSpend}">${esc(prevName.charAt(0).toUpperCase() + prevName.slice(1))} · ${eur.format(prevSpend)}</button>` : ""}</div>
+      <div class="field"><label for="f-date">Datum</label><input type="date" id="f-date" value="${defDate}"></div>
+      <p class="hint">Gaat van je saldo af en van het openstaande bedrag op je creditcard.</p>
+      <p class="err" id="f-err" hidden></p>
+      <div class="btns"><div class="right"><button type="button" class="btn" id="f-cancel">Annuleren</button><button type="submit" class="btn primary">Aflossen</button></div></div></form>`, "f-amt");
+    host.querySelectorAll("[data-q]").forEach(bt => bt.onclick = () => { $("f-amt").value = String(bt.dataset.q).replace(".", ","); });
+    $("sheet").addEventListener("submit", e => {
+      e.preventDefault();
+      const v = parseAmount($("f-amt").value), date = $("f-date").value || defDate;
+      if (!(v > 0)) return showErr("Vul een bedrag in, bijvoorbeeld 412,60.", "f-amt");
+      const m = date.slice(0, 7);
+      ccAdd("pay", -v, { amount: v, date, month: m });
+      const ok = adjustBalance(m, -v);
+      persist(); closeSheet(); render();
+      toast(ok === "locked" ? `${eur.format(v)} afgelost. Je saldo staat vast; werk het bij als het van je rekening is.` : ok ? `${eur.format(v)} afgelost` : `${eur.format(v)} afgelost. Vul je saldo in, dan gaat het er ook vanaf.`);
     });
   }
 
@@ -1102,7 +1442,9 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
         <div class="field"><label for="f-from">${isEdit ? "Nieuw bedrag geldt vanaf" : "Geldt vanaf"}</label><input type="month" id="f-from" value="${S.month}" placeholder="2026-11">
         <p class="hint">${isEdit ? "Maanden daarvoor houden het oude bedrag." : "Gaat daarna elke maand vanzelf mee."}</p></div>
         ${kind === "uit" ? `<div class="field"><label for="f-cat">Soort</label><select id="f-cat">${CATS.map(k => `<option ${k === cat ? "selected" : ""}>${esc(k)}</option>`).join("")}</select></div>` : ""}`;
-    if (kind === "buy") extra = `<div class="field"><label for="f-date">Datum</label><input type="date" id="f-date" value="${esc(defDate)}"></div>`;
+    if (kind === "buy") extra = `<div class="field"><label for="f-date">Datum</label><input type="date" id="f-date" value="${esc(defDate)}"></div>
+        <div class="field"><label for="f-from-acc">Betaald van</label><select id="f-from-acc"><option value="">Lopende rekening</option><option value="cc" ${item && item.via === "cc" ? "selected" : ""}>Creditcard</option>${S.pots.map(p => `<option value="${esc(p.id)}" ${item && item.fromPot === p.id ? "selected" : ""}>Spaarpotje: ${esc(p.name)}</option>`).join("")}</select>
+        <p class="hint" id="f-from-h"></p></div>`;
     if (kind === "kl") extra = `<div class="field"><label for="f-terms">Betalen</label><select id="f-terms">${KL_TERMS.map(([n, l]) => `<option value="${n}" ${n === Number(item?.terms || 3) ? "selected" : ""}>${l}</option>`).join("")}</select></div>
         <div class="field"><label for="f-start">Eerste betaling in</label><input type="month" id="f-start" value="${esc(item?.start || S.month)}" placeholder="2026-11"><p class="hint" id="f-hint"></p></div>`;
     mount(`<form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t" novalidate>
@@ -1111,6 +1453,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       ${amountField("f-amount", kind === "kl" ? "Totaalbedrag" : "Bedrag", amount)}
       ${extra}${footer(isEdit, fixed ? "Stoppen of verwijderen" : "Verwijderen")}</form>`, isEdit ? "f-amount" : "f-name");
     const hint = () => {
+      const fh = $("f-from-h"); if (fh) { const fv = $("f-from-acc").value; fh.textContent = fv === "cc" ? "Komt op je openstaande creditcard. Je saldo verandert pas als je aflost." : fv ? "Gaat van je potje af. Je rekening en je verwachting blijven gelijk." : ""; }
       const h = $("f-hint"); if (!h) return;
       const a = parseAmount($("f-amount").value);
       if (kind === "kl") { const n = Number($("f-terms").value), s = $("f-start").value; h.textContent = a > 0 && n > 1 && isMonth(s) ? `${eur.format(a / n)} per maand, van ${monthName(s)} t/m ${monthName(addMonths(s, n - 1))}.` : ""; }
@@ -1146,6 +1489,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
         if (!isEdit && from > S.month) S.month = from;
       } else if (kind === "buy") {
         data = { ...base, amount: amt, date: $("f-date").value || today() };
+        const fp = $("f-from-acc").value; if (fp === "cc") data.via = "cc"; else if (fp) data.fromPot = fp;
         if (!data.date.startsWith(S.month)) S.month = data.date.slice(0, 7);
       } else {
         const start = $("f-start").value.trim();
@@ -1177,6 +1521,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
         S.pots = S.pots.filter(p => p.id !== pot.id);
         S.items.filter(i => i.kind === "dep" && i.potId === pot.id).forEach(i => Object.keys(S.paid).forEach(m => setPaid(m, i.id, false)));
         S.items = S.items.filter(i => !(i.kind === "dep" && i.potId === pot.id));
+        S.items.forEach(i => { if (i.fromPot === pot.id) delete i.fromPot; });
         persist(); closeSheet(); go("sav"); toast("Potje verwijderd");
       };
     };
@@ -1270,7 +1615,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   }
   async function backup() {
     if (PREVIEW) return toast("Back-ups maken werkt in de echte app op je telefoon.");
-    const payload = JSON.stringify({ app: "saldo", v: 2, date: Date.now(), items: S.items, balances: S.balances, ccs: S.ccs, pots: S.pots, paid: S.paid, set: S.set }, null, 1);
+    const payload = JSON.stringify({ app: "saldo", v: 2, date: Date.now(), items: S.items, balances: S.balances, ccOpen: S.ccOpen, ccLog: S.ccLog, pots: S.pots, paid: S.paid, set: S.set }, null, 1);
     if (await giveFile(new Blob([payload], { type: "application/json" }), `saldo-backup-${today()}.json`)) { S.lastBackup = Date.now(); persist(); render(); toast("Back-up gemaakt"); }
   }
   document.getElementById("restoreInput").addEventListener("change", e => {
@@ -1303,9 +1648,12 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       h.forEach((e, k) => fixedRows.push([it.kind === "in" ? "Inkomen" : "Vaste last", it.name, it.cat || "", e.from === "0000-01" ? "" : e.from,
         k < h.length - 1 ? addMonths(h[k + 1].from, -1) : (it.until ? addMonths(it.until, -1) : ""), e.amount, FREQ_LABEL[e.freq], r2(monthly(e))]));
     });
-    const buys = [["Datum", "Omschrijving", "Bedrag"]].concat(S.items.filter(i => i.kind === "buy").sort((a, b) => a.date.localeCompare(b.date)).map(i => [i.date, i.name, i.amount]));
+    const buys = [["Datum", "Omschrijving", "Bedrag", "Betaald van"]].concat(S.items.filter(i => i.kind === "buy").sort((a, b) => a.date.localeCompare(b.date))
+      .map(i => [i.date, i.name, i.amount, i.via === "cc" ? "Creditcard" : i.fromPot ? "Spaarpotje " + ((S.pots.find(p => p.id === i.fromPot) || {}).name || "") : "Lopende rekening"]));
     const kl = [["Omschrijving", "Totaal", "Termijnen", "Eerste betaling", "Per termijn"]].concat(S.items.filter(i => i.kind === "kl").map(i => [i.name, i.amount, i.terms, i.start, r2(i.amount / i.terms)]));
     const pots = [["Potje", "Doel", "Verwacht eind " + monthName(NOW)]].concat(S.pots.map(p => [p.name, p.goal || "", r2(potAt(p, NOW))]));
+    const ccRows = [["Datum", "Soort", "Bedrag", "Effect op openstaand"]].concat(S.ccLog.slice().sort((a, b) => (a.date + a.at).localeCompare(b.date + b.at))
+      .map(e => [e.date, ccLabel(e), e.kind === "kl" ? Math.abs(e.delta) : e.amount, e.delta]));
     const deps = [["Potje", "Soort", "Vanaf / maand", "Tot en met", "Bedrag"]];
     S.items.filter(i => i.kind === "dep").forEach(it => {
       const pn = (S.pots.find(p => p.id === it.potId) || {}).name || "";
@@ -1315,7 +1663,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const wb = XLSX.utils.book_new();
     const add = (rows, name, w) => { const ws = XLSX.utils.aoa_to_sheet(rows); ws["!cols"] = w.map(x => ({ wch: x })); XLSX.utils.book_append_sheet(wb, ws, name); };
     add(per, "Per maand", [16, 11, 12, 10, 11, 9, 12, 10, 14, 18, 12]); add(fixedRows, "Vaste posten", [11, 24, 16, 9, 11, 10, 13, 10]);
-    add(buys, "Aankopen", [12, 28, 10]); add(kl, "Klarna", [24, 10, 10, 14, 11]); add(pots, "Spaarpotjes", [24, 12, 22]); add(deps, "Stortingen", [24, 12, 14, 12, 10]);
+    add(buys, "Aankopen", [12, 28, 10, 22]); add(ccRows, "Creditcard", [12, 26, 10, 20]); add(kl, "Klarna", [24, 10, 10, 14, 11]); add(pots, "Spaarpotjes", [24, 12, 22]); add(deps, "Stortingen", [24, 12, 14, 12, 10]);
     const buf = XLSX.write(wb, { type: "array", bookType: "xlsx" });
     await giveFile(new Blob([buf], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), `saldo-${today()}.xlsx`);
   }
@@ -1352,8 +1700,11 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     ["Salaris", "Zorgtoeslag", "Huur", "Energie", "Zorgverzekering", "Winterjas", "Kapper", "Buffer"].forEach(n => setPaid(m0, byName(n), true));
     S.balances[m0] = S.balances[m0] || { amount: 1240.35, at: Date.now() - 2 * 3600e3, example: true };
     S.balances[m1] = S.balances[m1] || { amount: 640.2, at: Date.now() - 25 * 864e5, example: true };
-    S.ccs[m0] = S.ccs[m0] || { amount: 175.89, at: Date.now() - 26 * 3600e3, example: true };
-    S.ccs[m1] = S.ccs[m1] || { amount: 412.6, at: Date.now() - 9 * 864e5, example: true };
+    if (!S.ccLog.length) {
+      ccAdd("set", 412.6, { amount: 412.6, month: m1, date: m1 + "-28", example: true });
+      ccAdd("pay", -412.6, { amount: 412.6, month: m0, date: m0 + "-06", example: true });
+      ccAdd("set", 175.89, { amount: 175.89, month: m0, date: m0 + "-07", example: true });
+    }
     persist(); render();
   }
   function unseed() {
@@ -1361,9 +1712,21 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     S.items = S.items.filter(i => !i.example);
     S.pots = S.pots.filter(p => !p.example);
     Object.keys(S.paid).forEach(m => ids.forEach(id => setPaid(m, id, false)));
-    [S.balances, S.ccs].forEach(o => Object.keys(o).forEach(m => { if (o[m].example) delete o[m]; }));
+    Object.keys(S.balances).forEach(m => { if (S.balances[m].example) delete S.balances[m]; });
+    S.ccLog.filter(e => e.example).forEach(ccRemove);
     persist(); render();
   }
+
+  function checkNewMonth() {
+    const n = ym(new Date());
+    if (n === NOW) return;
+    const wasNow = S.month === NOW;
+    NOW = n;
+    if (wasNow) { S.month = n; if (!host.firstChild) render(); }
+  }
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") checkNewMonth(); });
+  window.addEventListener("pageshow", checkNewMonth);
+  window.addEventListener("focus", checkNewMonth);
 
   applyTheme();
   if (PREVIEW && S.fresh) seed(); else render();
