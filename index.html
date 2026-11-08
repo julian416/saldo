@@ -148,6 +148,17 @@ html, body { overflow-x: clip; }
 .h-foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .h-foot div { display: flex; flex-direction: column; gap: 2px; }
 .h-foot div:last-child { text-align: right; }
+.h-duo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); padding-top: 2px; }
+.h-col { display: flex; flex-direction: column; gap: 6px; min-width: 0; container-type: inline-size; text-align: left; border: 0; background: none; color: inherit; padding: 0; }
+.h-col + .h-col { border-left: 1px solid var(--hero-line); padding-left: 16px; }
+.h-bal { padding-right: 14px; cursor: pointer; }
+.h-bal:active .h-num { opacity: .7; }
+.h-duo .h-l { min-height: 1.35rem; display: flex; align-items: baseline; gap: 5px; white-space: nowrap; font-size: .64rem; letter-spacing: .15em; text-transform: uppercase; color: var(--hero-muted); }
+.h-duo .h-l em { font-family: var(--f-display); font-weight: var(--dw, 400); font-style: var(--di, italic); text-transform: none; letter-spacing: 0; font-size: 1.05rem; color: var(--hero-ink); }
+.h-num { font-family: var(--f-display); font-weight: var(--dw, 400); font-size: clamp(1.9rem, 22.5cqi, 3.6rem); line-height: 1; letter-spacing: -.025em; margin-top: 2px; white-space: nowrap; }
+.h-num.neg { color: var(--hero-neg); }
+.h-sub { font-size: .7rem; color: var(--hero-muted); line-height: 1.4; }
+.h-sub svg { width: 11px; height: 11px; margin-left: 4px; vertical-align: -1px; opacity: .8; }
 .h-foot .h-l { font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--hero-muted); }
 .h-foot b { font-family: var(--f-display); font-weight: var(--dw, 400); font-size: 1.55rem; line-height: 1.05; }
 .h-foot b.neg { color: var(--hero-neg); }
@@ -354,7 +365,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
 (function () {
   "use strict";
   const PREVIEW = false;
-  const KEY = PREVIEW ? "saldo.preview.v4" : "saldo.v1";
+  const KEY = PREVIEW ? "saldo.preview.v5" : "saldo.v1";
 
   /* ---------- vaste gegevens ---------- */
   const CATS = ["Wonen", "Energie & water", "Verzekeringen", "Abonnementen", "Vervoer", "Boodschappen", "Kinderen", "Leningen", "Overig"];
@@ -367,13 +378,13 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   ];
   const DEFAULT_COLORS = { accent: "brons", in: "zand", uit: "leisteen", buy: "cognac", cc: "bordeaux", kl: "oudroze", sav: "salie" };
   const COLOR_TARGETS = [["accent", "Accent", "Vinkjes, knoppen en details"], ["in", "Inkomsten"], ["uit", "Vaste lasten"], ["buy", "Aankopen"], ["cc", "Creditcard"], ["kl", "Klarna"], ["sav", "Sparen"]];
-  const TILE_IDS = ["bal", "sav", "in", "uit", "cc", "kl", "buy"];
-  const DEFAULT_LAYOUT = [{ id: "bal", w: 1 }, { id: "sav", w: 2 }, { id: "in", w: 1 }, { id: "uit", w: 2 }, { id: "cc", w: 1 }, { id: "kl", w: 2 }, { id: "buy", w: 3 }];
+  const TILE_IDS = ["sav", "in", "uit", "cc", "kl", "buy"];
+  const DEFAULT_LAYOUT = [{ id: "sav", w: 2 }, { id: "in", w: 1 }, { id: "uit", w: 2 }, { id: "cc", w: 1 }, { id: "kl", w: 1 }, { id: "buy", w: 2 }];
   const BLOCKS = {
     in: { title: "Inkomsten", c: "var(--c-in)", fixed: true, add: "Inkomen toevoegen", verb: "Ontvangen" },
     uit: { title: "Vaste lasten", c: "var(--c-uit)", fixed: true, add: "Vaste last toevoegen", verb: "Afgeschreven" },
     buy: { title: "Aankopen", c: "var(--c-buy)", fixed: false, add: "Aankoop toevoegen", verb: "Afgeschreven" },
-    kl: { title: "Klarna", c: "var(--c-kl)", fixed: false, add: "Klarna-aankoop toevoegen", verb: "Betaald" },
+    kl: { title: "Klarna", c: "var(--c-kl)", fixed: false, add: "Klarna-aankoop toevoegen", verb: "Op creditcard" },
   };
   const ICONS = {
     huis: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .7-1.5l7-6a2 2 0 0 1 2.6 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
@@ -518,6 +529,41 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     }
     return total;
   }
+  function balAt(m) {
+    const k = Object.keys(S.balances).filter(x => x <= m).sort().pop();
+    return k ? { month: k, ...S.balances[k] } : null;
+  }
+  function valueAt(it, m) {
+    if (it.kind === "in" || it.kind === "uit") return monthly(entryAt(it, m));
+    if (it.kind === "buy") return String(it.date || "").startsWith(m) ? Number(it.amount) || 0 : 0;
+    if (it.kind === "kl") { const k = klarnaAt(it, m); return k ? k.share : 0; }
+    if (it.kind === "dep") return depAt(it, m);
+    return 0;
+  }
+  // past het saldo van maand m aan met een bedrag; geeft false als er nog geen saldo bekend is
+  function adjustBalance(m, delta) {
+    if (!delta) return true;
+    const b = balAt(m); if (!b) return false;
+    S.balances[m] = { ...(S.balances[m] || {}), amount: r2(Number(b.amount) + delta), at: Date.now() };
+    return true;
+  }
+  function togglePaid(id) {
+    const m = S.month, it = S.items.find(i => i.id === id); if (!it) return;
+    const on = !isPaid(m, id); setPaid(m, id, on);
+    const v = r2(valueAt(it, m));
+    if (it.kind === "kl") {
+      const cur = S.ccs[m];
+      S.ccs[m] = { ...(cur || {}), amount: r2((cur ? Number(cur.amount) || 0 : 0) + (on ? v : -v)), at: Date.now() };
+      toast(on ? `${eur.format(v)} op je creditcard gezet` : `${eur.format(v)} van je creditcard gehaald`);
+    } else {
+      const inc = it.kind === "in";
+      if (adjustBalance(m, (inc ? 1 : -1) * (on ? v : -v)))
+        toast(inc ? (on ? `${eur.format(v)} bijgeschreven op je saldo` : `${eur.format(v)} weer van je saldo gehaald`)
+                  : (on ? `${eur.format(v)} afgeschreven van je saldo` : `${eur.format(v)} teruggezet op je saldo`));
+      else toast("Afgevinkt. Vul je saldo in, dan rekent het vanzelf mee.");
+    }
+    persist(); render();
+  }
   function calc(m) {
     const r = { in: [], uit: [], buy: [], kl: [], dep: [] };
     for (const it of S.items) {
@@ -532,11 +578,13 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const sum = a => a.reduce((s, x) => s + x.v, 0), left = a => a.filter(x => !x.done).reduce((s, x) => s + x.v, 0);
     r.ccStand = S.ccs[m] || null; r.ccDone = isPaid(m, "cc");
     r.t = { in: sum(r.in), uit: sum(r.uit), buy: sum(r.buy), kl: sum(r.kl), sav: sum(r.dep), cc: r.ccStand ? Number(r.ccStand.amount) || 0 : 0 };
-    r.costs = r.t.uit + r.t.buy + r.t.kl + r.t.sav + r.t.cc;
+    // afgevinkte Klarna-termijnen staan al op de creditcard, dus die tellen via de creditcard mee
+    r.klLeft = left(r.kl); r.klOnCC = r.t.kl - r.klLeft;
+    r.costs = r.t.uit + r.t.buy + r.klLeft + r.t.sav + r.t.cc;
     r.over = r.t.in - r.costs;
     r.inLeft = left(r.in);
-    r.costLeft = left(r.uit) + left(r.buy) + left(r.kl) + left(r.dep) + (r.ccDone ? 0 : r.t.cc);
-    r.bal = S.balances[m] || null;
+    r.costLeft = left(r.uit) + left(r.buy) + r.klLeft + left(r.dep) + (r.ccDone ? 0 : r.t.cc);
+    r.bal = balAt(m);
     r.expected = r.bal ? r.bal.amount + r.inLeft - r.costLeft : null;
     r.savTotal = S.pots.reduce((s, p) => s + potAt(p, m), 0);
     return r;
@@ -621,19 +669,26 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   }
 
   function hero(c, mN) {
-    const has = !!c.bal, main = has ? c.expected : c.over;
+    const has = !!c.bal;
     const scale = Math.max(c.t.in, c.costs) || 1;
     const seg = (v, col) => v > 0 ? `<i style="width:${(v / scale * 100).toFixed(2)}%;--c:${col}"></i>` : "";
+    const balSub = !has ? "Tik om in te vullen" : c.bal.month === S.month ? "Bijgewerkt " + esc(whenText(c.bal.at)) : "Laatste stand uit " + esc(monthName(c.bal.month, false));
     return `<section class="hero grain" aria-live="polite">
-      <div class="h-top"><p class="h-eye">${has ? "Verwacht eind" : "Over in"}<em>${esc(mN)}</em></p>${S.month !== NOW ? `<button class="h-now" data-act="now">Naar nu</button>` : ""}</div>
-      <p class="h-big ${main < 0 ? "neg" : ""}">${money(main)}</p>
-      ${has ? `<dl class="h-stats num">
-          <div><dt>Op rekening</dt><dd>${eur.format(c.bal.amount)}</dd></div>
-          <div><dt>Nog binnen</dt><dd>+&nbsp;${eur.format(c.inLeft)}</dd></div>
-          <div><dt>Nog eraf</dt><dd>−&nbsp;${eur.format(c.costLeft)}</dd></div></dl>`
-        : `<div class="h-prompt"><span>Vul je saldo in om te zien wat je eind ${esc(mN)} overhoudt op je rekening.</span><button class="btn small primary" data-stand="bal">Saldo invullen</button></div>`}
-      <div class="bar" role="img" aria-label="Je inkomen deze maand: vaste lasten ${eur.format(c.t.uit)}, aankopen ${eur.format(c.t.buy)}, creditcard ${eur.format(c.t.cc)}, Klarna ${eur.format(c.t.kl)}, sparen ${eur.format(c.t.sav)}, over ${eur.format(Math.max(0, c.over))}">
-        ${seg(c.t.uit, "var(--cd-uit)")}${seg(c.t.buy, "var(--cd-buy)")}${seg(c.t.cc, "var(--cd-cc)")}${seg(c.t.kl, "var(--cd-kl)")}${seg(c.t.sav, "var(--cd-sav)")}${seg(c.over, "rgba(244,236,224,.75)")}</div>
+      ${S.month !== NOW ? `<div class="h-top"><p class="h-eye">${esc(monthName(S.month))}</p><button class="h-now" data-act="now">Naar nu</button></div>` : ""}
+      <div class="h-duo">
+        <button class="h-col h-bal" data-stand="bal" aria-label="Saldo bijwerken">
+          <span class="h-l">Op rekening</span>
+          <span class="h-num ${has && c.bal.amount < 0 ? "neg" : ""}">${has ? money(c.bal.amount) : "—"}</span>
+          <span class="h-sub">${balSub}<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3z"/></svg></span>
+        </button>
+        <div class="h-col">
+          <span class="h-l">${has ? "Eind" : "Over in"} <em>${esc(mN)}</em></span>
+          <span class="h-num ${(has ? c.expected : c.over) < 0 ? "neg" : ""}">${money(has ? c.expected : c.over)}</span>
+          <span class="h-sub num">${has ? `+&nbsp;${eur.format(c.inLeft)} binnen · −&nbsp;${eur.format(c.costLeft)} eraf` : "Vul je saldo in voor je verwachting"}</span>
+        </div>
+      </div>
+      <div class="bar" role="img" aria-label="Je inkomen deze maand: vaste lasten ${eur.format(c.t.uit)}, aankopen ${eur.format(c.t.buy)}, creditcard ${eur.format(c.t.cc)}, Klarna ${eur.format(c.klLeft)}, sparen ${eur.format(c.t.sav)}, over ${eur.format(Math.max(0, c.over))}">
+        ${seg(c.t.uit, "var(--cd-uit)")}${seg(c.t.buy, "var(--cd-buy)")}${seg(c.t.cc, "var(--cd-cc)")}${seg(c.klLeft, "var(--cd-kl)")}${seg(c.t.sav, "var(--cd-sav)")}${seg(c.over, "rgba(244,236,224,.75)")}</div>
       <div class="h-foot"><div><span class="h-l">Over deze maand</span><b class="${c.over < 0 ? "neg" : ""}">${money(c.over)}</b></div>
         <div><span class="h-l">Spaargeld eind ${esc(mN)}</span><b>${money(c.savTotal)}</b></div></div>
     </section>`;
@@ -659,7 +714,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     }
     if (id === "cc") {
       inner = `${head("Creditcard", "var(--c-cc)")}<div><div class="t-amt">${c.ccStand ? money(c.t.cc) : "—"}</div>
-        <div class="t-sub">${!c.ccStand ? "Tik voor je tussenstand" : c.ccDone ? "Afgeschreven" : "Gaat eind van de maand eraf"}</div></div>`;
+        <div class="t-sub">${!c.ccStand ? "Tik voor je tussenstand" : c.ccDone ? "Afgeschreven" : "Gaat eind van de maand eraf"}${c.klOnCC > 0 ? ` · incl. ${eur.format(c.klOnCC)} Klarna` : ""}</div></div>`;
       return `<div class="tile glass" data-stand="cc">${sizer(id, w)}${inner}</div>`;
     }
     if (id === "sav") {
@@ -894,7 +949,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const tab = t.closest("[data-tab]"); if (tab) return go(tab.dataset.tab);
     if (t.closest("#tabAdd")) return openChooser();
     const pd = t.closest("[data-paid]");
-    if (pd) { const id = pd.dataset.paid; setPaid(S.month, id, !isPaid(S.month, id)); persist(); render(); return; }
+    if (pd) { togglePaid(pd.dataset.paid); return; }
     const st = t.closest("[data-stand]"); if (st) return openStand(st.dataset.stand);
     const ad = t.closest("[data-add]"); if (ad) return openSheet(ad.dataset.add);
     const ed = t.closest("[data-edit]");
@@ -977,7 +1032,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   }
 
   function openStand(type) {
-    const isCC = type === "cc", store = isCC ? S.ccs : S.balances, cur = store[S.month];
+    const isCC = type === "cc", store = isCC ? S.ccs : S.balances, cur = isCC ? store[S.month] : balAt(S.month);
     const paid = isCC && isPaid(S.month, "cc");
     mount(`<form class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-t" novalidate>
       <h2 id="sh-t"><span class="dot" style="--c:${isCC ? "var(--c-cc)" : "var(--ink)"}"></span>${isCC ? "Creditcard" : "Lopende rekening"}</h2>
@@ -991,8 +1046,13 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       e.preventDefault();
       const v = parseAmount($("f-amt").value, !isCC);
       if (isNaN(v)) return showErr("Vul een bedrag in, bijvoorbeeld 1.250,00.", "f-amt");
-      store[S.month] = { amount: v, at: Date.now() };
-      if (isCC) setPaid(S.month, "cc", ccPaid);
+      if (isCC) {
+        // creditcard afgeschreven: het bedrag gaat (eenmalig) van je saldo af
+        const before = paid ? Number(cur ? cur.amount : 0) || 0 : 0, after = ccPaid ? v : 0;
+        adjustBalance(S.month, -(after - before));
+        setPaid(S.month, "cc", ccPaid);
+      }
+      store[S.month] = { ...(store[S.month] || {}), amount: v, at: Date.now() };
       persist(); closeSheet(); render(); toast(isCC ? "Tussenstand bijgewerkt" : "Saldo bijgewerkt");
     });
   }
