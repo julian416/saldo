@@ -27,7 +27,7 @@
 <body>
 <style>
 /* Layout: één app-kolom. Bovenaan een donkere 'leren' kaart met de verwachting eind van de maand,
-   daaronder een raster van 3 kolommen met glazen tegels (1, 2 of 3 breed, versleepbaar), zwevende tabbalk onderin. */
+   daaronder een raster van 6 kolommen met glazen tegels (⅓, ½, ⅔ of vol breed, versleepbaar), zwevende tabbalk onderin. */
 :root {
   --bg: #100E0C;
   --bg2: #191411;
@@ -158,14 +158,14 @@ html, body { overflow-x: clip; }
 .h-num { font-family: var(--f-display); font-weight: var(--dw, 400); font-size: clamp(1.9rem, 22.5cqi, 3.6rem); line-height: 1; letter-spacing: -.025em; margin-top: 2px; white-space: nowrap; }
 .h-num.neg { color: var(--hero-neg); }
 .h-sub { font-size: .7rem; color: var(--hero-muted); line-height: 1.4; }
-.h-sub svg { width: 11px; height: 11px; margin-left: 4px; vertical-align: -1px; opacity: .8; }
+.h-duo .h-l svg { width: 11px; height: 11px; align-self: center; opacity: .75; }
 .h-foot .h-l { font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: var(--hero-muted); }
 .h-foot b { font-family: var(--f-display); font-weight: var(--dw, 400); font-size: 1.55rem; line-height: 1.05; }
 .h-foot b.neg { color: var(--hero-neg); }
 
 /* raster met tegels */
-.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 10px; }
-.slot { grid-column: span var(--w, 1); min-width: 0; position: relative; }
+.grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 10px; }
+.slot { grid-column: span var(--w, 2); min-width: 0; position: relative; }
 .tile { position: relative; height: 100%; min-height: 116px; border-radius: var(--r); padding: 13px 13px 12px; display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
   container-type: inline-size; cursor: pointer; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; transition: background .15s; }
 .tile:active { background: var(--glass-hi); }
@@ -187,14 +187,14 @@ html, body { overflow-x: clip; }
 /* bewerken van de indeling */
 .edithint { font-size: .8rem; color: var(--muted); text-align: center; padding: 2px 8px; }
 .sizer { position: absolute; top: 7px; right: 7px; z-index: 2; display: none; gap: 2px; padding: 2px; border-radius: 999px; background: var(--sheet); border: 1px solid var(--glass-line); }
-.sizer button { border: 0; background: none; width: 24px; height: 22px; border-radius: 999px; font-size: .72rem; color: var(--muted); padding: 0; }
+.sizer button { border: 0; background: none; width: 23px; height: 22px; border-radius: 999px; font-size: .72rem; color: var(--muted); padding: 0; }
 .sizer button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 body.editing .sizer { display: flex; }
 body.editing .tile { touch-action: none; }
 @media (prefers-reduced-motion: no-preference) {
   body.editing .tile { animation: wig .28s ease-in-out infinite alternate; }
   body.editing .slot:nth-child(2n) .tile { animation-delay: -.14s; }
-  body.editing .slot[style*="--w:3"] .tile { animation-name: wig3; }
+  body.editing .slot[style*="--w:6"] .tile, body.editing .slot[style*="--w:4"] .tile { animation-name: wig3; }
   @keyframes wig { from { transform: rotate(-.7deg); } to { transform: rotate(.7deg); } }
   @keyframes wig3 { from { transform: rotate(-.25deg); } to { transform: rotate(.25deg); } }
 }
@@ -328,6 +328,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
 .swatches { display: flex; flex-wrap: wrap; gap: 8px; }
 .sw { width: 30px; height: 30px; border-radius: 50%; border: 3px solid var(--bg2); background: var(--sw); box-shadow: 0 0 0 1px var(--glass-line); padding: 0; }
 .sw[aria-checked="true"] { box-shadow: 0 0 0 1.5px var(--ink); }
+.sw-none { background: linear-gradient(135deg, transparent 46%, var(--faint) 46%, var(--faint) 54%, transparent 54%), var(--field); }
 
 .fonts { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
 .fontopt { border: 1px solid var(--glass-line); background: var(--field); border-radius: var(--r); padding: 12px; text-align: left; display: flex; flex-direction: column; gap: 6px; }
@@ -377,9 +378,11 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     ["grafiet", "Grafiet", "#2C2722", "#E8DFD2"],
   ];
   const DEFAULT_COLORS = { accent: "brons", in: "zand", uit: "leisteen", buy: "cognac", cc: "bordeaux", kl: "oudroze", sav: "salie" };
+  const DEFAULT_BG = { top: "cognac", bottom: "bordeaux", strength: "normaal" };
   const COLOR_TARGETS = [["accent", "Accent", "Vinkjes, knoppen en details"], ["in", "Inkomsten"], ["uit", "Vaste lasten"], ["buy", "Aankopen"], ["cc", "Creditcard"], ["kl", "Klarna"], ["sav", "Sparen"]];
   const TILE_IDS = ["sav", "in", "uit", "cc", "kl", "buy"];
-  const DEFAULT_LAYOUT = [{ id: "sav", w: 2 }, { id: "in", w: 1 }, { id: "uit", w: 2 }, { id: "cc", w: 1 }, { id: "kl", w: 1 }, { id: "buy", w: 2 }];
+  const WIDTHS = [[2, "⅓", "Een derde"], [3, "½", "Half"], [4, "⅔", "Twee derde"], [6, "1", "Volle breedte"]];
+  const DEFAULT_LAYOUT = [{ id: "sav", w: 3 }, { id: "in", w: 3 }, { id: "uit", w: 4 }, { id: "cc", w: 2 }, { id: "kl", w: 2 }, { id: "buy", w: 4 }];
   const BLOCKS = {
     in: { title: "Inkomsten", c: "var(--c-in)", fixed: true, add: "Inkomen toevoegen", verb: "Ontvangen" },
     uit: { title: "Vaste lasten", c: "var(--c-uit)", fixed: true, add: "Vaste last toevoegen", verb: "Afgeschreven" },
@@ -469,9 +472,14 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   const depStart = it => it.once || histOf(it)[0].from;
 
   /* ---------- opslag op dit toestel ---------- */
-  function normLayout(l) {
+  function normLayout(l, sixths) {
     const out = [], seen = new Set();
-    (Array.isArray(l) ? l : []).forEach(t => { if (t && TILE_IDS.includes(t.id) && !seen.has(t.id)) { seen.add(t.id); out.push({ id: t.id, w: [1, 2, 3].includes(t.w) ? t.w : 1 }); } });
+    (Array.isArray(l) ? l : []).forEach(t => {
+      if (!t || !TILE_IDS.includes(t.id) || seen.has(t.id)) return;
+      let w = Number(t.w);
+      if (!sixths) w = w * 2; // oude indeling in derden omzetten naar zesden
+      seen.add(t.id); out.push({ id: t.id, w: [2, 3, 4, 6].includes(w) ? w : 2 });
+    });
     DEFAULT_LAYOUT.forEach(t => { if (!seen.has(t.id)) out.push({ ...t }); });
     return out;
   }
@@ -490,9 +498,12 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       name: typeof s.name === "string" ? s.name : "Saldo",
       theme: ["auto", "light", "dark"].includes(s.theme) ? s.theme : "dark",
       font: "hedvig",
-      colors: {}, layout: normLayout(s.layout),
+      colors: {}, layout: normLayout(s.layout, s.grid === 6), grid: 6,
     };
     for (const k in DEFAULT_COLORS) { const v = s.colors && s.colors[k]; out.set.colors[k] = PALETTE.some(p => p[0] === v) ? v : DEFAULT_COLORS[k]; }
+    const bg = obj(s.bg), okBg = v => v === "none" || PALETTE.some(p => p[0] === v);
+    out.set.bg = { top: okBg(bg.top) ? bg.top : DEFAULT_BG.top, bottom: okBg(bg.bottom) ? bg.bottom : DEFAULT_BG.bottom,
+      strength: ["zacht", "normaal", "sterk"].includes(bg.strength) ? bg.strength : DEFAULT_BG.strength };
     return out;
   }
   let saved = null;
@@ -621,6 +632,12 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const f = FONTS.find(x => x[0] === S.set.font) || FONTS[0];
     root.style.setProperty("--f-display", `${f[2]}, "Iowan Old Style", "Baskerville", "Times New Roman", serif`);
     root.style.setProperty("--dw", f[3]); root.style.setProperty("--di", f[4]); root.style.setProperty("--ds", f[5]);
+    // achtergrondgloed
+    const hexA = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a.toFixed(3)})`; };
+    const k = { zacht: .5, normaal: 1, sterk: 1.55 }[S.set.bg.strength] || 1;
+    const glow = (id, aDark, aLight) => id === "none" ? "transparent" : hexA(dark ? pal(id)[2] : pal(id)[3], Math.min(.95, (dark ? aDark : aLight) * k));
+    root.style.setProperty("--glow1", glow(S.set.bg.top, .5, .5));
+    root.style.setProperty("--glow2", glow(S.set.bg.bottom, .34, .3));
     const mt = document.querySelector('meta[name="theme-color"]');
     if (mt) mt.setAttribute("content", dark ? "#100E0C" : "#EEE7DC");
   }
@@ -663,7 +680,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     let h = "";
     if (S.items.some(i => i.example) || S.pots.some(p => p.example)) h += `<div class="note glass"><span>Je ziet voorbeeldbedragen.</span><button class="btn small" data-act="unseed">Wis en begin zelf</button></div>`;
     h += hero(c, mN);
-    if (S.editing) h += `<p class="edithint">Sleep een tegel naar een andere plek. Kies rechtsboven 1, 2 of 3 breed.</p>`;
+    if (S.editing) h += `<p class="edithint">Sleep een tegel naar een andere plek. Kies rechtsboven de breedte.</p>`;
     h += `<div class="grid" id="grid">${gridHtml(c)}</div>`;
     return h;
   }
@@ -677,9 +694,9 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       ${S.month !== NOW ? `<div class="h-top"><p class="h-eye">${esc(monthName(S.month))}</p><button class="h-now" data-act="now">Naar nu</button></div>` : ""}
       <div class="h-duo">
         <button class="h-col h-bal" data-stand="bal" aria-label="Saldo bijwerken">
-          <span class="h-l">Op rekening</span>
+          <span class="h-l">Op rekening<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3z"/></svg></span>
           <span class="h-num ${has && c.bal.amount < 0 ? "neg" : ""}">${has ? money(c.bal.amount) : "—"}</span>
-          <span class="h-sub">${balSub}<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10.5-10.5a2.1 2.1 0 0 0-3-3L5 17v3z"/></svg></span>
+          <span class="h-sub">${balSub}</span>
         </button>
         <div class="h-col">
           <span class="h-l">${has ? "Eind" : "Over in"} <em>${esc(mN)}</em></span>
@@ -699,11 +716,11 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       `<div class="slot${drag && drag.id === id ? " ph" : ""}" data-tile="${id}" style="--w:${w}">${tileHtml(id, w, c)}</div>`).join("");
   }
   function sizer(id, w) {
-    return `<div class="sizer" role="group" aria-label="Breedte">${[1, 2, 3].map(n => `<button data-size="${id}:${n}" aria-pressed="${n === w}" aria-label="${n} breed">${n}</button>`).join("")}</div>`;
+    return `<div class="sizer" role="group" aria-label="Breedte">${WIDTHS.map(([n, l, a]) => `<button data-size="${id}:${n}" aria-pressed="${n === w}" aria-label="${a}">${l}</button>`).join("")}</div>`;
   }
   function tileHtml(id, w, c) {
     const head = (label, col) => `<div class="t-lbl"><span class="dot" style="--c:${col}"></span>${label}</div>`;
-    const n = w === 3 ? 5 : w === 2 ? 3 : 0;
+    const n = w >= 6 ? 5 : w >= 4 ? 3 : w === 3 ? 2 : 0;
     const list = (rows, fmt) => n && rows.length ? `<ul class="t-list">${rows.slice(0, n).map(fmt).join("")}${rows.length > n ? `<li class="more">en nog ${rows.length - n}</li>` : ""}</ul>` : "";
     const rowLi = r => `<li class="${r.done ? "done" : ""}"><span class="n">${esc(r.it.name)}</span><span class="v">${eur.format(r.v)}</span></li>`;
     let inner;
@@ -720,7 +737,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     if (id === "sav") {
       const pots = S.pots.map(p => ({ p, v: potAt(p, S.month) }));
       const sub = c.t.sav ? `+ ${eur.format(c.t.sav)} inleg deze maand` : S.pots.length ? `${S.pots.length} potje${S.pots.length === 1 ? "" : "s"}` : "Tik om een potje te maken";
-      const li = x => `<li><span class="ic">${icon(x.p.icon)}</span><span class="n">${esc(x.p.name)}</span>${w === 3 && x.p.goal ? `<span class="pb"><i style="width:${Math.min(100, x.v / x.p.goal * 100).toFixed(1)}%"></i></span>` : ""}<span class="v">${eur.format(x.v)}</span></li>`;
+      const li = x => `<li><span class="ic">${icon(x.p.icon)}</span><span class="n">${esc(x.p.name)}</span>${w >= 4 && x.p.goal ? `<span class="pb"><i style="width:${Math.min(100, x.v / x.p.goal * 100).toFixed(1)}%"></i></span>` : ""}<span class="v">${eur.format(x.v)}</span></li>`;
       inner = `${head("Sparen", "var(--c-sav)")}<div><div class="t-amt">${money(c.savTotal)}</div><div class="t-sub">${sub}</div></div>${n && pots.length ? `<ul class="t-list">${pots.slice(0, n).map(li).join("")}${pots.length > n ? `<li class="more">en nog ${pots.length - n}</li>` : ""}</ul>` : ""}`;
       return `<div class="tile glass" data-go="sav">${sizer(id, w)}${inner}</div>`;
     }
@@ -834,6 +851,14 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
         <fieldset class="field"><legend>Licht of donker</legend><div class="seg">${th.map(([v, l]) => `<input type="radio" name="theme" id="th-${v}" value="${v}" ${S.set.theme === v ? "checked" : ""}><label for="th-${v}">${l}</label>`).join("")}</div></fieldset>
         <div class="field"><label for="set-name">Naam bovenin</label><input id="set-name" maxlength="20" autocomplete="off" value="${esc(S.set.name)}" placeholder="Saldo"></div></section>
       <section class="panel glass"><h3>Kleuren</h3>${colorRows}<button class="link" data-act="reset-colors">Standaardkleuren terugzetten</button></section>
+      <section class="panel glass"><h3>Achtergrond</h3>${[["top", "Gloed linksboven"], ["bottom", "Gloed rechtsonder"]].map(([pos, label]) => {
+        const cur = S.set.bg[pos];
+        return `<div class="crow"><span class="clabel">${label} <small>${cur === "none" ? "Geen" : esc(pal(cur)[1])}</small></span>
+          <div class="swatches" role="radiogroup" aria-label="${label}"><button class="sw sw-none" role="radio" aria-checked="${cur === "none"}" aria-label="Geen" title="Geen" data-bg="${pos}:none"></button>${PALETTE.map(([id, nm, l, d]) =>
+            `<button class="sw" role="radio" aria-checked="${id === cur}" aria-label="${nm}" title="${nm}" data-bg="${pos}:${id}" style="--sw:${dark ? l : d}"></button>`).join("")}</div></div>`;
+      }).join("")}
+        <fieldset class="field"><legend>Sterkte</legend><div class="seg">${[["zacht", "Zacht"], ["normaal", "Normaal"], ["sterk", "Sterk"]].map(([v, l]) => `<input type="radio" name="bgs" id="bgs-${v}" value="${v}" ${S.set.bg.strength === v ? "checked" : ""}><label for="bgs-${v}">${l}</label>`).join("")}</div></fieldset>
+        <button class="link" data-act="reset-bg">Standaard achtergrond terugzetten</button></section>
       <section class="panel glass"><h3>Indeling</h3><p class="hint">Houd op het overzicht een tegel ingedrukt om hem te verschuiven of breder te maken.</p>
         <div class="btns"><button class="btn" data-act="edit-layout">Indeling aanpassen</button><button class="btn" data-act="reset-layout">Standaard indeling</button></div></section>
       <section class="panel glass"><h3>Back-up en Excel</h3>
@@ -963,6 +988,8 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const hm = t.closest("[data-month]"); if (hm) { S.month = hm.dataset.month; return go("overview"); }
     const fo = t.closest("[data-font]");
     if (fo) { S.set.font = fo.dataset.font; persist(); applyTheme(); render(); return; }
+    const bgb = t.closest("[data-bg]");
+    if (bgb) { const [pos, id] = bgb.dataset.bg.split(":"); S.set.bg[pos] = id; persist(); applyTheme(); render(); return; }
     const sw = t.closest("[data-color]");
     if (sw) { const [k, id] = sw.dataset.color.split(":"); S.set.colors[k] = id; persist(); applyTheme(); render(); return; }
     const a = t.closest("[data-act]"); if (!a) return;
@@ -973,6 +1000,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       case "new-pot": openPot(); break;
       case "edit-layout": S.view = "overview"; setEditing(true); window.scrollTo({ top: 0 }); break;
       case "reset-layout": S.set.layout = normLayout([]); persist(); toast("Standaard indeling terug"); break;
+      case "reset-bg": S.set.bg = Object.assign({}, DEFAULT_BG); persist(); applyTheme(); render(); toast("Standaard achtergrond terug"); break;
       case "reset-colors": S.set.colors = Object.assign({}, DEFAULT_COLORS); persist(); applyTheme(); render(); toast("Standaardkleuren terug"); break;
       case "seed": seed(); toast("Voorbeelden geladen"); break;
       case "unseed": unseed(); toast("Voorbeelden gewist"); break;
@@ -989,6 +1017,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   });
   document.addEventListener("change", e => {
     if (e.target.name === "theme") { S.set.theme = e.target.value; persist(); applyTheme(); render(); }
+    if (e.target.name === "bgs") { S.set.bg.strength = e.target.value; persist(); applyTheme(); }
   });
   document.addEventListener("input", e => {
     if (e.target.id === "set-name") { S.set.name = e.target.value; persist(); const l = document.getElementById("logoName"); if (l) l.textContent = appName(); }
