@@ -1,14 +1,14 @@
 {
   "name": "Saldo",
   "short_name": "Saldo",
-  "description": "Je inkomsten, vaste lasten, aankopen, creditcard en Klarna per maand. Alles blijft op je eigen telefoon.",
+  "description": "Je inkomsten, vaste lasten, aankopen, sparen, creditcard en Klarna per maand. Alles blijft op je eigen telefoon.",
   "lang": "nl",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#EBEFF5",
-  "theme_color": "#EBEFF5",
+  "background_color": "#100E0C",
+  "theme_color": "#100E0C",
   "icons": [
     { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
