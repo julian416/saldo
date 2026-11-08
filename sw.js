@@ -1,6 +1,6 @@
 // Zorgt dat Saldo ook zonder internet opent. Verhoog VERSION bij een nieuwe versie van de app.
-const VERSION = "saldo-5";
-const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png", "./favicon-48.png", "./xlsx.full.min.js", "./fonts/hedvig-letters-serif-latin-400-normal.woff2", "./fonts/geist-latin-300-normal.woff2", "./fonts/geist-latin-400-normal.woff2", "./fonts/geist-latin-500-normal.woff2", "./fonts/geist-latin-600-normal.woff2"];
+const VERSION = "saldo-6";
+const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png", "./favicon-48.png", "./icons/varianten/icon-espresso.png", "./icons/varianten/icon-goud.png", "./icons/varianten/icon-creme.png", "./icons/varianten/icon-cognac.png", "./icons/varianten/icon-bordeaux.png", "./icons/varianten/icon-olijf.png", "./icons/varianten/icon-nacht.png", "./xlsx.full.min.js", "./fonts/hedvig-letters-serif-latin-400-normal.woff2", "./fonts/geist-latin-300-normal.woff2", "./fonts/geist-latin-400-normal.woff2", "./fonts/geist-latin-500-normal.woff2", "./fonts/geist-latin-600-normal.woff2"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));

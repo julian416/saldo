@@ -242,6 +242,14 @@ input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius
 .switch input:checked + span { background: var(--accent); }
 .switch input:checked + span::after { transform: translateX(18px); background: var(--accent-ink); }
 .switch input:focus-visible + span { outline: 1.5px solid var(--accent); outline-offset: 2px; }
+.icopts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.icopt { border: 0; background: none; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: .72rem; color: var(--muted); }
+.icopt img { width: 100%; max-width: 64px; aspect-ratio: 1; height: auto; border-radius: 22%; box-shadow: 0 4px 12px rgba(0,0,0,.3); outline: 2px solid transparent; outline-offset: 3px; }
+.icopt[aria-checked="true"] img { outline-color: var(--ink); }
+.icopt[aria-checked="true"] span { color: var(--ink); }
+.steps { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: .88rem; }
+.iconlink { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+.iconlink code { font-size: .78rem; background: var(--field); border: 1px solid var(--glass-line); border-radius: var(--r-sm); padding: 6px 8px; overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; min-width: 0; }
 .preview { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; padding: 14px; border-radius: var(--r); background: var(--bg); border: 1px solid var(--glass-line); }
 .preview .tile { cursor: default; }
 
@@ -428,6 +436,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
   ];
   const DEFAULT_COLORS = { accent: "brons", in: "zand", uit: "leisteen", buy: "cognac", cc: "bordeaux", kl: "oudroze", sav: "salie" };
   const DEFAULT_BG = { h1: 22, h2: 350, strength: 65 };
+  const ICON_VARIANTS = [["espresso", "Espresso"], ["goud", "Zwart en goud"], ["creme", "Crème"], ["cognac", "Cognac"], ["bordeaux", "Bordeaux"], ["olijf", "Olijf"], ["nacht", "Nacht"]];
   const TILE_NAMES = { sav: "Sparen", in: "Inkomsten", uit: "Vaste lasten", cc: "Creditcard", kl: "Klarna", buy: "Aankopen" };
   const SOURCES = [
     ["manual", "Eigen bedrag", "Je vult het bedrag zelf in"],
@@ -589,6 +598,7 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       name: typeof s.name === "string" ? s.name : "Saldo",
       theme: ["auto", "light", "dark"].includes(s.theme) ? s.theme : "dark",
       font: "hedvig", custom, balLock: s.balLock !== false,
+      icon: ICON_VARIANTS.some(v => v[0] === s.icon) ? s.icon : "espresso",
       colors: {}, layout: normLayout(s.layout, s.grid === 6, custom.map(t => t.id)), grid: 6,
     };
     for (const k in DEFAULT_COLORS) { const v = s.colors && s.colors[k]; out.set.colors[k] = PALETTE.some(p => p[0] === v) ? v : DEFAULT_COLORS[k]; }
@@ -1088,6 +1098,16 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
         <div class="srow col"><span class="lbl"><label for="bg-h2">Gloed rechtsonder</label><small id="bg-h2-n">${hueName(S.set.bg.h2)}</small></span><input type="range" class="hue" id="bg-h2" min="0" max="360" step="1" value="${S.set.bg.h2}" data-bgrange="h2" style="--thumb:hsl(${S.set.bg.h2} 50% 45%)"></div>
         <div class="srow col"><span class="lbl"><label for="bg-s">Sterkte</label><small id="bg-s-n">${S.set.bg.strength}%</small></span><input type="range" id="bg-s" min="0" max="100" step="1" value="${S.set.bg.strength}" data-bgrange="strength" style="--track:linear-gradient(90deg, var(--glass-line), var(--accent))"></div>
         <button class="link" data-act="reset-bg">Standaard achtergrond terugzetten</button></div></details>
+      <details class="sec glass" data-sec="icon" ${open("icon")}><summary><b>App-icoon</b><small>${esc((ICON_VARIANTS.find(v => v[0] === S.set.icon) || ICON_VARIANTS[0])[1])}</small></summary><div class="sec-body">
+        <div class="icopts" role="radiogroup" aria-label="Kleur van het app-icoon">${ICON_VARIANTS.map(([id, nm]) => `<button class="icopt" role="radio" aria-checked="${id === S.set.icon}" data-icon-v="${id}"><img src="icons/varianten/icon-${id}.png" alt="" width="60" height="60"><span>${nm}</span></button>`).join("")}</div>
+        <p class="hint">Je iPhone legt het icoon vast als je Saldo op je beginscherm zet. Zo wissel je van icoon:</p>
+        <ol class="steps">
+          <li>Maak een back-up. <button class="link" data-act="backup" style="display:inline;padding:0">Back-up maken</button></li>
+          <li>Verwijder Saldo van je beginscherm.</li>
+          <li>Open deze link in Safari:<span class="iconlink"><code id="icon-url">${esc(iconLink())}</code><button class="btn small" data-act="copy-icon">Kopieer</button></span></li>
+          <li>Tik op de deelknop en kies <b>Zet op beginscherm</b>.</li>
+          <li>Open Saldo en zet je back-up terug.</li>
+        </ol></div></details>
       <details class="sec glass" data-sec="tiles" ${open("tiles")}><summary><b>Tegels</b><small>${shown} van ${S.set.layout.length} zichtbaar</small></summary><div class="sec-body">
         ${tiles}
         <div class="btns"><button class="btn primary" data-act="new-tile">+ Eigen tegel</button><button class="btn" data-act="edit-layout">Indeling aanpassen</button><button class="btn" data-act="reset-layout">Standaard indeling</button></div></div></details>
@@ -1276,6 +1296,8 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     const pe = t.closest("[data-pot-edit]"); if (pe) return openPot(S.pots.find(p => p.id === pe.dataset.potEdit));
     const dp = t.closest("[data-dep]"); if (dp) return openDeposit({ potId: dp.dataset.dep });
     const hm = t.closest("[data-month]"); if (hm) { S.month = hm.dataset.month; return go("overview"); }
+    const iv = t.closest("[data-icon-v]");
+    if (iv) { S.set.icon = iv.dataset.iconV; persist(); applyIcon(); render(); return; }
     const fo = t.closest("[data-font]");
     if (fo) { S.set.font = fo.dataset.font; persist(); applyTheme(); render(); return; }
     const sw = t.closest("[data-color]");
@@ -1287,6 +1309,13 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
       case "now": S.month = NOW; render(); break;
       case "new-pot": openPot(); break;
       case "cc-pay": openPay(); break;
+      case "copy-icon": {
+        const url = iconLink();
+        const done = () => toast("Link gekopieerd. Plak hem in Safari.");
+        const fallback = () => { const c = $("icon-url"); if (c) { const r = document.createRange(); r.selectNodeContents(c); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); } toast("Houd de link ingedrukt om te kopiëren"); };
+        try { navigator.clipboard.writeText(url).then(done, fallback); } catch (e) { fallback(); }
+        break;
+      }
       case "cc-set": openStand("cc"); break;
       case "edit-layout": S.view = "overview"; setEditing(true); window.scrollTo({ top: 0 }); break;
       case "reset-layout": S.set.layout = normLayout([], true, S.set.custom.map(x => x.id)); persist(); render(); toast("Standaard indeling terug"); break;
@@ -1717,6 +1746,21 @@ fieldset.field { border: 0; margin: 0; padding: 0; }
     persist(); render();
   }
 
+  function iconLink() {
+    const base = PREVIEW ? "julian416.github.io/saldo/" : location.host + location.pathname;
+    return `https://${base}?icoon=${S.set.icon}`;
+  }
+  function applyIcon() {
+    const href = `icons/varianten/icon-${S.set.icon}.png`;
+    document.querySelectorAll('link[rel="apple-touch-icon"], link[rel="icon"]').forEach(l => l.setAttribute("href", href));
+  }
+  (() => {
+    try {
+      const q = new URLSearchParams(location.search).get("icoon");
+      if (q && ICON_VARIANTS.some(v => v[0] === q) && q !== S.set.icon) { S.set.icon = q; persist(); }
+    } catch (e) {}
+    applyIcon();
+  })();
   function checkNewMonth() {
     const n = ym(new Date());
     if (n === NOW) return;
